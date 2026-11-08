@@ -47,9 +47,10 @@ class Element {
   querySelector(selector) { return this.querySelectorAll(selector)[0]; }
 }
 
-const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const entry = new URL(process.argv.includes('--standalone') ? '../downloads/syllaber.html' : '../index.html', import.meta.url);
+const html = readFileSync(entry, 'utf8');
 const document = new Element();
-const ids = Object.fromEntries([...html.slice(0, html.indexOf('<script')).matchAll(/\bid="([^"]+)"/gu)]
+const ids = Object.fromEntries([...html.split('</main>')[0].matchAll(/\bid="([^"]+)"/gu)]
   .map(match => [match[1], new Element()]));
 document.getElementById = id => ids[id];
 document.createElement = () => new Element();
@@ -58,7 +59,20 @@ ids['syllables-enabled'].setAttribute('aria-pressed', 'true');
 ids['rhymes-enabled'].setAttribute('aria-pressed', 'true');
 ids['classical-enabled'].setAttribute('aria-pressed', 'false');
 
-let script = html.split(/<script[^>]*>/gu).slice(1).map(block => block.slice(0, block.indexOf('</script>'))).join('\n');
+let script = [...html.matchAll(/<script\b([^>]*)>/gu)]
+  .map(match => [null, match[1], html.slice(match.index + match[0].length, html.indexOf('</script>', match.index))])
+  .filter(([, attributes]) => !/type="application\/ld\+json"/u.test(attributes))
+  .map(([, attributes, body]) => {
+    const src = /src="([^"]+)"/u.exec(attributes);
+    if (!src) return body;
+    const url = new URL(src[1], entry);
+    return readFileSync(url, 'utf8').replace(/import (\w+) from '([^']+)';/gu, (_, name, path) => {
+      const part = readFileSync(new URL(path, url), 'utf8');
+      assert.ok(part.startsWith('export default "') && part.endsWith('";\n'));
+      assert.equal(typeof JSON.parse(part.slice('export default '.length, -2)), 'string');
+      return part.replace('export default ', 'const ' + name + '=');
+    });
+  }).join('\n');
 script = script.replace('initialize().then(() => {', 'globalThis.ready = initialize().then(() => {');
 const context = {
   document, window:new Element(), requestAnimationFrame:callback => callback(), structuredClone,

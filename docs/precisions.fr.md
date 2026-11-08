@@ -1,6 +1,6 @@
 # Syllabes et sonorités — Précisions
 
-Décompressez l’archive et ouvrez **Syllabes-et-sonorites.html** dans votre navigateur. Collez vos vers, puis cliquez sur **Analyser**. Une ligne vide marque le passage d’une strophe à la suivante. L’analyse s’effectue hors ligne.
+Ouvrez l’application en ligne ou décompressez le projet et ouvrez **downloads/syllaber.html** dans votre navigateur. Ce fichier autonome fonctionne hors ligne. Collez vos vers, puis cliquez sur **Analyser**. Une ligne vide marque le passage d’une strophe à la suivante.
 
 Après modification du texte, cliquez de nouveau sur **Analyser** pour obtenir les résultats correspondants.
 

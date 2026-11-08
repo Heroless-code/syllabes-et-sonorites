@@ -4,8 +4,52 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
-  <title>Syllabes et sonorités</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src {{SCRIPT_POLICY}}; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+  <title>Syllaber — Compter les syllabes et analyser les rimes</title>
+  <meta name="description" content="Syllaber : comptez les syllabes de vos vers, analysez les rimes, les césures, les allitérations et les assonances. Gratuit, sans compte, traitement sur votre appareil.">
+  <meta name="robots" content="{{ROBOTS}}">
+  <link rel="canonical" href="https://heroless-code.github.io/syllabes-et-sonorites/">
+  <link rel="icon" href="{{ICON}}" type="image/svg+xml" sizes="any">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Syllaber">
+  <meta property="og:title" content="Syllaber — Syllabes et sonorités">
+  <meta property="og:description" content="Comptez les syllabes de vos poèmes et explorez leurs rimes, leurs césures et leurs sonorités dans une seule vue.">
+  <meta property="og:url" content="https://heroless-code.github.io/syllabes-et-sonorites/">
+  <meta property="og:image" content="https://heroless-code.github.io/syllabes-et-sonorites/docs/screenshots/desktop.jpg">
+  <meta property="og:image:alt" content="Analyse du Bateau ivre avec syllabes, rimes, sonorités et césures dans Syllaber">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://heroless-code.github.io/syllabes-et-sonorites/#website",
+        "url": "https://heroless-code.github.io/syllabes-et-sonorites/",
+        "name": "Syllaber",
+        "alternateName": "Syllabes et sonorités",
+        "inLanguage": "fr"
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://heroless-code.github.io/syllabes-et-sonorites/#application",
+        "name": "Syllaber",
+        "alternateName": "Syllabes et sonorités",
+        "url": "https://heroless-code.github.io/syllabes-et-sonorites/",
+        "description": "Outil gratuit d’analyse de la poésie française : syllabes, rimes, sonorités et césures estimées. Le texte est traité sur l’appareil du lecteur.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "inLanguage": "fr",
+        "isAccessibleForFree": true,
+        "browserRequirements": "Navigateur récent avec JavaScript",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+        "featureList": ["Compteur de syllabes", "Disposition et richesse des rimes", "Allitérations et assonances", "Césures estimées", "Contrôles de versification classique"],
+        "isPartOf": {"@id": "https://heroless-code.github.io/syllabes-et-sonorites/#website"}
+      }
+    ]
+  }
+  </script>
   <style>:root{font-family:Georgia,"Times New Roman",serif;color:#41494b;background:#f6f7f5;font-synthesis:none;--ink:#41494b;--muted:#657174;--line:#dce2de;--accent:#224f48}
 *{box-sizing:border-box}body{margin:0}button,textarea,input,summary,select{font:inherit}button,summary,input[type=checkbox]{cursor:pointer}button{border:0}button:disabled{cursor:wait}button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8bb9af;outline-offset:3px}[hidden]{display:none!important}
 .workspace{max-width:1040px;margin:0 auto;padding:48px 42px 25px}h1{font-size:clamp(28px,4.2vw,38px);font-weight:400;line-height:1.14;letter-spacing:-1.25px;margin:0}.title-break{display:none}.intro{font-size:14px;line-height:1.5;color:var(--muted);margin:12px 0 27px}form{margin:0}.field-label{display:block;font:600 12px Arial,sans-serif;letter-spacing:.1px;margin:0 0 11px}
@@ -24,7 +68,14 @@ textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#f
 @media print{body{background:#fff}.workspace{max-width:none;padding:0}form,.masthead,.result-header,.status,footer{display:none!important}.result-section{margin:0}.line-result{break-inside:avoid}.sonority-overview,.sonority-chip{-webkit-print-color-adjust:exact;print-color-adjust:exact}.sonority-toolbar{position:static;backdrop-filter:none}}
 
 .workspace{--details-width:calc(5.1rem + 4.3rem + 6.5rem + 5.5rem);max-width:1460px}
-.masthead,#transcription-form,footer,.credits,#status{width:min(956px,calc(100% - var(--details-width)))}
+.masthead,#transcription-form,footer,.credits,#status,.about{width:min(956px,calc(100% - var(--details-width)))}
+.product-subtitle{font-size:20px;line-height:1.3;margin:6px 0 0;color:var(--muted)}
+.about{margin-top:35px;padding-top:23px;border-top:1px solid var(--line);font:14px/1.65 Georgia,serif;color:var(--muted)}
+.about h2{font:400 21px/1.3 Georgia,serif;color:var(--ink);margin:0 0 12px}
+.about h3{font:600 12px/1.5 Arial,sans-serif;color:var(--accent);margin:18px 0 5px}
+.about p{margin:0 0 12px}.about a,footer a{color:var(--accent);text-underline-offset:3px}
+.about ol{padding-left:21px;margin:0 0 12px}.about li{padding-left:2px}
+@media print{.about{display:none}}
 .result-header{gap:10px;flex-wrap:wrap}
 #result-title{font:400 23px/1.2 Georgia,serif;letter-spacing:-.3px}
 .reading-controls{display:flex;gap:7px;flex-wrap:wrap}
@@ -81,7 +132,7 @@ textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#f
 .result-section[data-rhymes=false]{--rhyme-track:0px;--scheme-track:0px;--richness-track:0px}
 .result-section[data-rhymes=false] :is(.rhyme-heading,.scheme-heading,.richness-heading,.verse-rhyme,.verse-scheme,.verse-richness){display:none}
 @media(max-width:1100px){
-  .masthead,#transcription-form,footer,.credits,#status{width:100%}
+  .masthead,#transcription-form,footer,.credits,#status,.about{width:100%}
   .verse-entry.sonorities-row{display:flex;flex-direction:column;gap:3px}
   .verse-entry .sonority-text{width:100%;order:0}
   .verse-entry .sonorities-panel{width:100%;order:1;padding:0 12px 0 0;border:0}
@@ -114,8 +165,9 @@ textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#f
 <body>
   <main class="workspace">
     <header class="masthead">
-      <h1>Syllabes et sonorités</h1>
-      <p class="intro">Scandez vos vers et repérez leurs allitérations et leurs assonances dans le même texte.</p>
+      <h1>Syllaber</h1>
+      <p class="product-subtitle">Syllabes et sonorités</p>
+      <p class="intro">Comptez les syllabes de vos vers et explorez leurs rimes, leurs césures et leurs sonorités.</p>
     </header>
 
     <form id="transcription-form">
@@ -155,7 +207,22 @@ textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#f
       <div id="results" class="results"></div>
     </section>
     <p id="status" class="status" role="status" aria-live="polite">Préparation du lexique local…</p>
-    <footer>Lecture classique assistée <span aria-hidden="true">·</span> Fonctionne entièrement hors ligne</footer>
+    <noscript><p class="intro">Activez JavaScript pour analyser votre texte avec Syllaber. L’analyse s’effectue sur votre appareil.</p></noscript>
+    <section class="about" aria-labelledby="about-title">
+      <h2 id="about-title">Compter les syllabes et analyser un poème</h2>
+      <p>Syllaber est un outil gratuit de lecture de la poésie française, sans inscription. Il réunit le découpage en syllabes, l’analyse des rimes et le repérage des sonorités dans le même texte. Votre poème reste sur votre appareil.</p>
+      <h3>Comment utiliser Syllaber ?</h3>
+      <ol>
+        <li>Collez votre texte en conservant une ligne vide entre les strophes.</li>
+        <li>Cliquez sur <strong>Analyser</strong>, puis combinez les options Syllabes, Rimes, Sonorités, Règle classique et Césure.</li>
+        <li>Cliquez sur un son pour repérer ses occurrences dans les vers.</li>
+      </ol>
+      <h3>Syllabes, rimes et césures</h3>
+      <p>Le compteur affiche le nombre de syllabes de chaque vers, parfois sous forme de fourchette. Les colonnes de rimes indiquent le genre féminin ou masculin, la disposition — plates, croisées, embrassées ou redoublées — et la richesse : pauvre, suffisante ou riche. Les allitérations et les assonances sont mises en couleur.</p>
+      <p>L’option Césure propose des coupes en <strong>//</strong> avec leur découpage, par exemple 6/6 pour un alexandrin. Ces coupes et certains comptes restent des estimations à relire. L’option Règle classique applique les deux contrôles détaillés dans la notice du projet.</p>
+      <p>Pour essayer : <a href="https://heroless-code.github.io/syllabes-et-sonorites/docs/examples/le-bateau-ivre.txt">Le Bateau ivre d’Arthur Rimbaud</a>, 100 vers à copier. Sur ordinateur comme sur mobile, toutes les options se combinent librement. La version HTML autonome disponible dans le projet fonctionne aussi hors ligne.</p>
+    </section>
+    <footer><span>Syllaber · Lecture classique assistée</span><a href="https://github.com/Heroless-code/syllabes-et-sonorites">Le projet sur GitHub</a></footer>
     <details class="credits"><summary>Sources linguistiques</summary><p>Référentiel : Wiktionnaire, « Français moderne traditionnel ». Lexique local adapté du JSONL fourni et de <a href="https://www.lexique.org/" target="_blank" rel="noopener noreferrer">Lexique 4.1</a>, Boris New, Christophe Pallier et collaborateurs ; données Lexique adaptées sous <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>. Complément sélectionné dans <a href="https://redac.univ-tlse2.fr/lexiques/glaff.html" target="_blank" rel="noopener noreferrer">GLÀFF 1.2.2</a>, Franck Sajous, Nabil Hathout et Basilio Calderone, sous <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a>. L’analyse des sonorités utilise les données intégrées.</p><p>Sonorités : exemple de Racine dans le <a href="https://www.dictionnaire-academie.fr/article/A9A1240" target="_blank" rel="noopener noreferrer">Dictionnaire de l’Académie française</a>. Lecture classique assistée : Gérald Purnelle, <a href="https://orbi.uliege.be/bitstream/2268/33658/1/Purnelle29.pdf" target="_blank" rel="noopener noreferrer">La langue des vers</a>, Université de Liège, JADT 2006 ; <a href="https://www.larousse.fr/dictionnaires/francais/di%C3%A9r%C3%A8se/25391" target="_blank" rel="noopener noreferrer">Larousse, diérèse</a>. Les variantes sont proposées explicitement ; aucun mètre n’est imposé.</p><details><summary>Notice GLÀFF</summary><pre class="source-notice">GLÀFF est un lexique développé à CLLE-ERSS (UMR 5263, http://w3.erss.univ-tlse2.fr/)
 par Franck Sajous, Nabil Hathout et Basilio Calderone.
 
@@ -217,8 +284,6 @@ L'article est disponible ici :
 http://redac.univ-tlse2.fr/lexiques/glaff/glaff-taln2013.pdf
 </pre></details></details>
   </main>
-<script id="syllaber-lexicon">{{SYLLABER_LEXICON}}</script>
-<script id="syllaber-engine">{{SYLLABER_ENGINE}}</script>
-  <script type="module">{{MODULES}}</script>
+{{SCRIPTS}}
 </body>
 </html>

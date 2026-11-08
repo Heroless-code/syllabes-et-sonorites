@@ -1,4 +1,7 @@
 * text=auto eol=lf
 *.jpg binary
 index.html linguist-generated=true
+assets/app.js linguist-generated=true
+assets/lexicon-*.js linguist-generated=true
+downloads/syllaber.html linguist-generated=true
 src/syllaber-lexicon.js linguist-generated=true

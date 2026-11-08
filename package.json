@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Offline French poetry analysis — syllables, rhymes, sounds and estimated caesuras",
+  "description": "Syllaber — compteur de syllabes et analyse des rimes, sonorités et césures de la poésie française",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node tests/regression.mjs"
+    "test": "node tests/regression.mjs && node tests/regression.mjs --standalone"
   },
   "engines": {
     "node": ">=22"

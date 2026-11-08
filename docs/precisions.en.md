@@ -1,6 +1,6 @@
 # Syllables and sound patterns — Notes
 
-Open **index.html** in a recent browser, paste a French poem and select **Analyser**. A blank line separates stanzas. After editing the text, analyse it again to display the corresponding result.
+Open the online application or **downloads/syllaber.html** in a recent browser, paste a French poem and select **Analyser**. The downloaded HTML is self-contained and works offline. A blank line separates stanzas. After editing the text, analyse it again to display the corresponding result.
 
 ## Syllables and rhyme endings
 

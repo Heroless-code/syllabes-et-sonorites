@@ -1,7 +1,7 @@
-# Syllabes et sonorités
+# Syllaber — Syllabes et sonorités
 
-**Un atelier de lecture poétique du français, autonome et utilisable hors ligne.**  
-**A self-contained tool for reading and analysing French poetry, available offline.**
+**Compteur de syllabes et analyse des rimes, sonorités et césures de la poésie française. Gratuit, sans compte, avec une version autonome hors ligne.**<br>
+**A free French syllable counter and poetry analysis tool for rhymes, sound patterns and estimated caesuras, with a self-contained offline version.**
 
 [**Ouvrir l’application · Open the app**](https://heroless-code.github.io/syllabes-et-sonorites/) · [Télécharger le projet · Download](https://github.com/Heroless-code/syllabes-et-sonorites/archive/refs/heads/main.zip)
 
@@ -31,7 +31,7 @@ Le texte d’exemple est **Le Bateau ivre**, d’Arthur Rimbaud, dans l’éditi
 ### Utilisation
 
 1. [Ouvrez l’application](https://heroless-code.github.io/syllabes-et-sonorites/) ou téléchargez le projet.
-2. Pour une utilisation locale, décompressez le ZIP et ouvrez **index.html** dans un navigateur récent.
+2. Pour une utilisation locale, décompressez le ZIP et ouvrez **downloads/syllaber.html** dans un navigateur récent. Ce fichier HTML contient tous les moteurs et lexiques nécessaires.
 3. Collez vos vers, puis cliquez sur **Analyser** ou utilisez **Ctrl + Entrée**.
 
 Le texte et les lexiques sont traités sur votre appareil. Le HTML local fonctionne sans installation et sans connexion. Les options se combinent librement.
@@ -68,7 +68,7 @@ The example poem is **Le Bateau ivre** by Arthur Rimbaud, from the 1942 edition 
 ### Getting started
 
 1. [Open the application](https://heroless-code.github.io/syllabes-et-sonorites/) or download the project.
-2. For offline use, unzip the project and open **index.html** in a recent browser.
+2. For offline use, unzip the project and open **downloads/syllaber.html** in a recent browser. This single HTML file includes all engines and dictionaries.
 3. Paste your poem and select **Analyser**, or press **Ctrl + Enter**.
 
 Text processing and dictionaries stay on your device. The local HTML works without installation or an internet connection. Caesuras, pronunciations and some counts are reading suggestions that benefit from human review.
@@ -86,9 +86,25 @@ Text processing and dictionaries stay on your device. The local HTML works witho
 Node.js 22 or later is used to build and test the project.
 
 <pre><code>node scripts/build.mjs
-node tests/regression.mjs</code></pre>
+node tests/regression.mjs
+node tests/regression.mjs --standalone</code></pre>
 
-The project uses bundled sources and standard Node.js modules. **index.html** is the ready-to-use build. Edit the sources in **src/**, then rebuild.
+The project uses bundled sources and standard Node.js modules. **index.html** is the hosted entry point, with local scripts in **assets/**. The build splits the existing phonetic dictionary into JavaScript modules below 2 MB each, keeping the public HTML small and crawlable. **downloads/syllaber.html** is the complete single-file offline build. Edit the sources in **src/**, then rebuild. Both distributions run the same engines and regression checks.
+
+### Référencement / Search visibility
+
+Le site se présente sous le nom **Syllaber**. Le titre, la description, l’URL canonique, les informations de partage et les données structurées décrivent son usage réel. Les explications sont présentes dans le HTML, même sans JavaScript. Le fichier [sitemap.xml](https://heroless-code.github.io/syllabes-et-sonorites/sitemap.xml) contient la page principale ; la copie autonome porte `noindex` pour éviter les doublons.
+
+Pour demander l’indexation avec le compte Google du propriétaire :
+
+1. Ouvrir [Google Search Console](https://search.google.com/search-console/) et ajouter une propriété **Préfixe de l’URL** : `https://heroless-code.github.io/syllabes-et-sonorites/`.
+2. Choisir la vérification par fichier HTML, déposer le fichier fourni à la racine du dépôt, puis valider dans Search Console. Conserver ce fichier lors des publications suivantes.
+3. Soumettre `sitemap.xml` dans **Sitemaps**, inspecter l’URL principale et demander son indexation.
+4. Suivre les impressions et les clics pour la requête **syllaber**, puis améliorer les contenus en fonction des recherches observées.
+
+Google décide de l’indexation et du classement. Aucun rang ni délai n’est garanti. Un nom de domaine propre peut être envisagé ensuite ; aucun achat n’est nécessaire pour cette publication. [Guide officiel Google](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl?hl=fr).
+
+The site uses **Syllaber** consistently in its title, visible content and metadata. Its owner can verify the URL-prefix property in Google Search Console, submit the sitemap and request indexing. Search inclusion and ranking remain Google's decision; no first-place guarantee is made.
 
 The regression suite covers source-text preservation, independent controls, rhyme schemes, richness, internal-rhyme alignment, short and odd-length lines, caesura divisions, and changed-input handling. Earlier development checks also exercised 158 poetic pages and the preface of Victor Hugo’s *Les Contemplations* on Wikisource.
 
