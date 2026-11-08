@@ -14,6 +14,8 @@
 
 Collez un poème et cliquez sur **Analyser**. Activez les outils qui vous intéressent pour explorer le texte dans une seule vue.
 
+Le texte d’exemple est **Le Bateau ivre**, d’Arthur Rimbaud, dans l’édition des *Œuvres complètes* de 1942 sur Wikisource. [Copier les 100 vers](docs/examples/le-bateau-ivre.txt) · [Lire la source](https://fr.wikisource.org/wiki/%C5%92uvres_compl%C3%A8tes_%28Rimbaud%29/Bateau_ivre)
+
 | Fonction | Dans l’application |
 | --- | --- |
 | **Syllabes** | Affiche les frontières / et le compte par vers, avec une fourchette lorsque plusieurs comptes sont possibles. |
@@ -48,6 +50,8 @@ Les césures, les prononciations et certains comptes sont des propositions de le
 ## <img src="docs/assets/gb.svg" width="24" alt="United Kingdom"> English
 
 Paste a French poem and select **Analyser**. Combine the tools to explore syllables, rhymes and repeated sounds in the same text. The application interface is in French.
+
+The example poem is **Le Bateau ivre** by Arthur Rimbaud, from the 1942 edition of his *Œuvres complètes* on Wikisource. [Copy the complete 100-line poem](docs/examples/le-bateau-ivre.txt) · [Read the source](https://fr.wikisource.org/wiki/%C5%92uvres_compl%C3%A8tes_%28Rimbaud%29/Bateau_ivre)
 
 | Feature | What it shows |
 | --- | --- |

@@ -29,6 +29,6 @@ The GLÀFF notice supplied with the data is also included in the application's *
 
 ## Captures · Screenshots
 
-Les captures montrent l’application et des vers de Victor Hugo. Elles ont été réalisées pendant le développement du projet.
+Les captures montrent l’application et les premiers vers du **Bateau ivre**, d’Arthur Rimbaud. Le fichier d’exemple reproduit les 100 vers depuis [Wikisource, Œuvres complètes, édition de 1942](https://fr.wikisource.org/wiki/%C5%92uvres_compl%C3%A8tes_%28Rimbaud%29/Bateau_ivre). La mise en page de la lettrine initiale a été réunie dans « Comme » pour le texte à copier.
 
-The screenshots show the application and lines by Victor Hugo. They were captured during project development.
+The screenshots show the application and the opening lines of **Le Bateau ivre** by Arthur Rimbaud. The example file reproduces the 100 lines from the linked Wikisource edition. The initial drop cap was joined back into “Comme” in the copyable text.

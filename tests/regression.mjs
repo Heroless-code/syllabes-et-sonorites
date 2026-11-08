@@ -283,5 +283,10 @@ assert.equal(ids['transcribe-button'].disabled, false);
 ids['input-text'].value = '';
 ids['input-text'].invoke('input');
 assert.match(ids.status.textContent, /^Prêt\./u);
-console.log('Rimes redoublées par strophe, rimes internes et marquage de leurs phonèmes vérifiés.');
+const example = readFileSync(new URL('../docs/examples/le-bateau-ivre.txt', import.meta.url), 'utf8').trim();
+const exampleRows = await analyze(example);
+assert.equal(exampleRows.length, 100);
+assert.equal(ids.status.textContent, '100 vers analysés.');
+assert.equal(ids['result-section'].hidden, false);
+console.log('Régressions et exemple complet du Bateau ivre vérifiés.');
 
