@@ -1,0 +1,14 @@
+{
+  "name": "syllabes-et-sonorites",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline French poetry analysis — syllables, rhymes, sounds and estimated caesuras",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node tests/regression.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

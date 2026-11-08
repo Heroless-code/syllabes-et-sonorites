@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.jpg binary
+index.html linguist-generated=true
+src/syllaber-lexicon.js linguist-generated=true

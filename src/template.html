@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+  <title>Syllabes et sonorités</title>
+  <style>:root{font-family:Georgia,"Times New Roman",serif;color:#41494b;background:#f6f7f5;font-synthesis:none;--ink:#41494b;--muted:#657174;--line:#dce2de;--accent:#224f48}
+*{box-sizing:border-box}body{margin:0}button,textarea,input,summary,select{font:inherit}button,summary,input[type=checkbox]{cursor:pointer}button{border:0}button:disabled{cursor:wait}button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8bb9af;outline-offset:3px}[hidden]{display:none!important}
+.workspace{max-width:1040px;margin:0 auto;padding:48px 42px 25px}h1{font-size:clamp(28px,4.2vw,38px);font-weight:400;line-height:1.14;letter-spacing:-1.25px;margin:0}.title-break{display:none}.intro{font-size:14px;line-height:1.5;color:var(--muted);margin:12px 0 27px}form{margin:0}.field-label{display:block;font:600 12px Arial,sans-serif;letter-spacing:.1px;margin:0 0 11px}
+textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#fff;border:1px solid #cdd7d1;border-radius:9px;padding:17px 20px;font-size:16px;line-height:1.6;color:var(--ink);box-shadow:0 2px 5px #1f3c3304}textarea:focus{outline:none;border-color:#477d70;box-shadow:0 0 0 3px #477d7012}textarea::placeholder{color:#8e9895;font-size:16px}
+.actions{display:flex;flex-direction:column;gap:16px;margin-top:18px}.submit-control{display:flex;align-items:center;align-self:flex-start;gap:14px}#transcribe-button{font:600 13px Arial,sans-serif;letter-spacing:.1px;background:var(--accent);color:#fff;padding:14px 24px;border-radius:7px;min-width:139px;box-shadow:0 2px 3px #18352d10}#transcribe-button:hover:not(:disabled){background:#163e37}#transcribe-button:disabled{opacity:.55}.keyboard-hint{white-space:nowrap;font:10px/1.5 Arial,sans-serif;color:var(--muted)}.mode-controls{font:12px/1.5 Arial,sans-serif}.checkbox-label{display:flex;align-items:center;gap:7px;width:fit-content;white-space:nowrap}input[type=checkbox]{width:14px;height:14px;margin:0;accent-color:var(--accent)}
+.result-section{margin-top:42px}.result-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line)}h2{font:600 12px Arial,sans-serif;margin:0}.text-button{font:11px Arial,sans-serif;color:var(--accent);padding:4px 0;background:none}.text-button:hover{text-decoration:underline}
+.line-result{position:relative;padding:10px 0;border-bottom:1px solid #e6eae7;overflow-wrap:anywhere}.line-original{font-size:16px;line-height:1.5;white-space:pre-wrap;padding-right:28px}.line-result.blank-line{height:18px;padding:0;border:0}.word-uncertain{text-decoration:underline dotted #a99978;text-decoration-thickness:1px;text-underline-offset:5px}
+.status{font:11px/1.5 Arial,sans-serif;color:var(--muted);min-height:17px;margin:18px 0 0}.status.error{color:#a24233}footer{font:10px Arial,sans-serif;color:#8a9590;margin-top:49px;padding-top:18px;border-top:1px solid #e4e8e4;display:flex;gap:9px;flex-wrap:wrap}.credits{font:10px/1.7 Arial,sans-serif;color:#7b8680;margin-top:9px}.credits>summary{display:inline;list-style:none}.credits>summary::-webkit-details-marker{display:none}.credits p{max-width:700px}.credits a{color:#426e63}.source-notice{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;max-width:100%}
+.sonorities-row{display:grid;grid-template-columns:240px minmax(0,1fr);column-gap:20px;align-items:start;padding:8px 0}.sonority-text{grid-column:2;grid-row:1;min-width:0}.sonorities-panel{grid-column:1;grid-row:1;min-width:0;margin:0;padding-right:12px;border-right:1px solid var(--line);display:grid;gap:6px;font:11px/1.6 Arial,sans-serif}.sonority-group{display:flex;flex-wrap:wrap;align-items:center;min-width:0;gap:3px}.sonority-group h3{font:600 9px/1.5 Arial,sans-serif;letter-spacing:0;color:var(--muted);margin:0 3px 0 0}.sonority-category-body,.sonority-list{display:contents}
+.sonority-chip{display:inline-flex;align-items:baseline;gap:3px;width:auto;max-width:100%;text-align:left;white-space:normal;overflow-wrap:anywhere;font:11px/1.4 Arial,sans-serif;padding:1px 4px;border-radius:3px;background:var(--sonority-background);color:var(--sonority-ink)}.sonority-chip:hover{box-shadow:inset 0 -1px var(--sonority-accent)}.sonority-chip[aria-pressed=true]{box-shadow:inset 0 -2px var(--sonority-accent)}.sonority-phone{font-size:11px;white-space:nowrap}.sonority-count{font-size:8.5px;white-space:nowrap}.sonority-distributed .sonority-phone{font-weight:600}.sonority-chip.sonority-uncertain{text-decoration:underline dotted;text-underline-offset:3px}.sonority-chip.sonority-hidden,.sonority-chip.sonority-hidden:hover{background:#edf0ec;color:#566560;box-shadow:inset 0 0 0 1px #d4dcd5;text-decoration:none}.sonority-hidden .sonority-phone{text-decoration:line-through}.sonority-empty{margin:0;font-size:9px;line-height:1.4;color:#788486}
+.sonority-unit,.sonority-overview{box-decoration-break:clone;-webkit-box-decoration-break:clone}.sonority-overview{background:var(--sonority-bands,var(--sonority-background));color:var(--sonority-ink);border-radius:2px;box-shadow:inset 0 -1px var(--sonority-accent)}.sonority-overview.sonority-singleton{box-shadow:none}.sonority-hit[data-sonority-focus]{background:var(--sonority-focus-background);color:var(--sonority-focus-ink);box-shadow:inset 0 -2px var(--sonority-focus-accent)}.sonority-muted{background:transparent!important;box-shadow:none!important;color:#657174}.has-sonority-selection .word-uncertain{text-decoration-color:#a4a9a6}
+
+.sonorities-description{font:10px/1.7 Arial,sans-serif;color:var(--muted);margin:9px 0 4px}.sonority-toolbar{position:sticky;top:0;z-index:8;display:flex;align-items:center;flex-wrap:wrap;gap:5px 16px;padding:7px 0;background:#f6f7f5ed;backdrop-filter:blur(5px);border-bottom:1px solid #e6eae7}.sonority-filters{display:flex;align-items:center;gap:12px}.sonority-category-toggle{display:inline-flex;align-items:center;gap:4px;padding:0;background:none;color:var(--muted);font:inherit;line-height:1.5;text-align:left;border-radius:2px}.sonority-category-toggle::before{content:'';width:5px;height:5px;flex:none;border:1px solid #879b8f;border-radius:50%}.sonority-category-toggle[aria-pressed=true]{color:#3d584b}.sonority-category-toggle[aria-pressed=true]::before{background:#668677}.sonority-category-toggle[aria-pressed=mixed]::before{background:linear-gradient(to right,#668677 50%,transparent 50%)}.sonority-category-toggle[aria-pressed=false]{color:#7b8580}.sonority-category-toggle:hover{text-decoration:underline;text-underline-offset:3px}.sonority-filters .sonority-category-toggle{font-size:11px}.sonority-singletons-toggle{padding:2px 5px;border:1px solid transparent}.sonority-singletons-toggle[aria-pressed=true]{background:#e6ece6;border-color:#c8d5cc}
+@media(min-width:651px) and (max-width:900px){.sonorities-row{grid-template-columns:205px minmax(0,1fr);column-gap:16px}.sonorities-panel{padding-right:10px}}
+@media(max-width:650px){.workspace{padding:30px 21px 22px}.title-break{display:initial}h1{letter-spacing:-.85px}.intro{font-size:13px;margin-bottom:23px}textarea{padding:15px;min-height:195px}.actions{gap:12px}.mode-controls{font-size:11px}#transcribe-button{padding:13px 17px;min-width:117px;font-size:12px}.submit-control{gap:12px}.keyboard-hint{font-size:9px}.result-section{margin-top:33px}.sonorities-row{display:flex;flex-direction:column;gap:6px}.sonority-text{width:100%;order:0}.sonorities-panel{width:100%;order:1;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px;row-gap:5px;padding:0;border:0}footer{margin-top:34px}}
+@media print{body{background:#fff}.workspace{max-width:none;padding:0}form,.masthead,.result-header,.status,footer{display:none!important}.result-section{margin:0}.line-result{break-inside:avoid}.sonority-overview,.sonority-chip{-webkit-print-color-adjust:exact;print-color-adjust:exact}.sonority-toolbar{position:static;backdrop-filter:none}}
+
+.workspace{--details-width:calc(5.1rem + 4.3rem + 6.5rem + 5.5rem);max-width:1460px}
+.masthead,#transcription-form,footer,.credits,#status{width:min(956px,calc(100% - var(--details-width)))}
+.result-header{gap:10px;flex-wrap:wrap}
+#result-title{font:400 23px/1.2 Georgia,serif;letter-spacing:-.3px}
+.reading-controls{display:flex;gap:7px;flex-wrap:wrap}
+.reading-toggle{border:1px solid #cbd8d0;border-radius:20px;padding:7px 13px;background:#fff;color:var(--accent);font:600 12px/1.2 Arial,sans-serif}
+.reading-toggle[aria-pressed=true]{background:#e4eee8;border-color:#a8c1b1}
+.reading-toggle:hover{border-color:#477d70}
+.reading-toggle span{display:inline-block;margin-right:2px;min-width:9px;text-align:center}
+.result-section{
+  --verse-font:ui-monospace,"Cascadia Code","SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  --count-width:5.1rem;
+  --rhyme-width:4.3rem;
+  --scheme-width:6.5rem;
+  --richness-width:5.5rem;
+  --verse-track:minmax(0,1fr);
+  --count-track:var(--count-width);
+  --rhyme-track:var(--rhyme-width);
+  --scheme-track:var(--scheme-width);
+  --richness-track:var(--richness-width);
+}
+.verse-column-heads,.line-result{display:grid;grid-template-columns:var(--verse-track) var(--count-track) var(--rhyme-track) var(--scheme-track) var(--richness-track)}
+.line-result{padding:4px 0}
+.line-result.stanza-start{margin-top:12px}
+.classical-mark{display:none;position:absolute;inset-inline-end:calc(100% + 8px);top:50%;transform:translateY(-50%);width:1.25rem;text-align:center;font:700 18px/1 "Segoe UI Symbol","Segoe UI",sans-serif;color:#2b6b45}
+.classical-mark.irregular{color:#a43d34}
+.result-section[data-classical=true] .classical-mark{display:block}
+.verse-column-heads{padding-top:4px;border-bottom:1px solid var(--line);color:var(--muted);font:12px/1.5 var(--verse-font)}
+.verse-column-heads span{padding:3px 9px 6px}
+.verse-column-heads span:first-child{padding-left:0}
+.syllables-heading,.verse-count{grid-column:2;text-align:right}
+.rhyme-heading,.verse-rhyme{grid-column:3}
+.scheme-heading,.verse-scheme{grid-column:4}
+.richness-heading,.verse-richness{grid-column:5}
+.verse-entry{grid-column:1;min-width:0}
+.verse-entry.sonorities-row{padding:0;grid-template-columns:205px minmax(0,1fr);column-gap:14px}
+.verse-entry .sonorities-panel{gap:2px}
+.line-original{padding-right:12px;font:15px/1.8 var(--verse-font);tab-size:4}
+.verse-metric{min-width:0;padding:3px 9px 0;border-left:1px solid var(--line);color:#596963;font:12px/1.5 var(--verse-font);overflow-wrap:anywhere}
+.verse-count{font-weight:700;color:var(--accent);white-space:nowrap}
+.verse-rhyme-letter{font-weight:700;color:var(--accent)}
+.verse-richness{font-family:Arial,sans-serif}
+.richness-badge{display:inline-block;padding:0 4px;border-radius:4px;font-size:11px;font-weight:600;white-space:nowrap}
+.richness-badge[data-quality="pauvre"]{color:#563d72;background:#eee6f6}
+.richness-badge[data-quality="suffisante"]{color:#24566d;background:#e0edf5}
+.richness-badge[data-quality="riche"]{color:#24583b;background:#dfefe3}
+.rhyme-annotation{display:block;font:11px/1.45 Arial,sans-serif}
+.internal-rhyme{border-top:2px solid #c48c16;padding-top:1px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.syllable-divider{opacity:.75;padding-inline:1px}
+.sonority-hit .syllable-divider{opacity:1}
+.line-result.has-caesuras{padding-top:11px}
+.caesura-divider{position:relative;color:#245e82;background:#dcedfb;border-radius:2px;padding-inline:2px;font-weight:700;white-space:nowrap}
+.caesura-divider::before{content:attr(data-pattern);position:absolute;bottom:calc(100% + 1px);left:50%;transform:translateX(-50%);color:#245e82;font:600 9px/1 Arial,sans-serif;white-space:nowrap;pointer-events:none;user-select:none}
+.result-section[data-syllables=false]{--count-track:0px}
+.result-section[data-syllables=false] :is(.syllables-heading,.syllable-divider,.verse-count){display:none}
+.result-section[data-rhymes=false]{--rhyme-track:0px;--scheme-track:0px;--richness-track:0px}
+.result-section[data-rhymes=false] :is(.rhyme-heading,.scheme-heading,.richness-heading,.verse-rhyme,.verse-scheme,.verse-richness){display:none}
+@media(max-width:1100px){
+  .masthead,#transcription-form,footer,.credits,#status{width:100%}
+  .verse-entry.sonorities-row{display:flex;flex-direction:column;gap:3px}
+  .verse-entry .sonority-text{width:100%;order:0}
+  .verse-entry .sonorities-panel{width:100%;order:1;padding:0 12px 0 0;border:0}
+}
+@media(max-width:650px){
+  .result-header{padding-bottom:11px}
+  .reading-toggle{padding:6px 10px}
+  .result-section{--count-width:4.1rem;--rhyme-width:3.6rem;--scheme-width:5.6rem;--richness-width:4.7rem}
+  .verse-column-heads{font-size:11px}
+  .verse-column-heads span,.verse-metric{padding-left:6px;padding-right:6px}
+  .line-original{font-size:14px}
+  .classical-mark{inset-inline-end:calc(100% + 3px);width:1rem;font-size:16px}
+}
+@media(max-width:1100px){
+  .result-section{--verse-track:0px;--count-width:minmax(0,1fr);--rhyme-width:minmax(0,1fr);--scheme-width:minmax(0,1fr);--richness-width:minmax(0,1fr)}
+  .result-section[data-syllables=false][data-rhymes=false]{--verse-track:minmax(0,1fr)}
+  .verse-column-heads{display:none}
+  .line-result{row-gap:5px}
+  .verse-entry{grid-column:1/-1}
+  .verse-metric{text-align:left}
+  .verse-metric::before{content:attr(data-column);display:block;color:var(--muted);font:10px/1.3 Arial,sans-serif}
+  .classical-mark{top:6px;transform:none}
+}
+@media print{
+  .workspace{max-width:none}
+  .sonority-hit{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+  <main class="workspace">
+    <header class="masthead">
+      <h1>Syllabes et sonorités</h1>
+      <p class="intro">Scandez vos vers et repérez leurs allitérations et leurs assonances dans le même texte.</p>
+    </header>
+
+    <form id="transcription-form">
+      <label class="field-label" for="input-text">Votre texte</label>
+      <textarea id="input-text" name="text" rows="7" spellcheck="false" placeholder="Écrivez ou collez vos vers…"></textarea>
+      <div class="actions">
+        <div class="submit-control">
+          <button id="transcribe-button" type="submit" disabled>Chargement…</button>
+          <span class="keyboard-hint">Ctrl + Entrée</span>
+        </div>
+      </div>
+    </form>
+
+    <section id="result-section" class="result-section" data-syllables="true" data-rhymes="true" aria-labelledby="result-title" hidden>
+      <div class="result-header">
+        <h2 id="result-title">Vos vers</h2>
+        <div class="reading-controls" role="group" aria-label="Affichage des vers">
+          <button id="syllables-enabled" type="button" class="reading-toggle" aria-pressed="true" aria-controls="results"><span aria-hidden="true">/</span> Syllabes</button>
+          <button id="rhymes-enabled" type="button" class="reading-toggle" aria-pressed="true" aria-controls="results">Rimes</button>
+          <button id="sonorities-enabled" type="button" class="reading-toggle" aria-pressed="true" aria-controls="results"><span aria-hidden="true">●</span> Sonorités</button>
+          <button id="classical-enabled" type="button" class="reading-toggle" aria-pressed="false" aria-controls="results">Règle classique</button>
+          <button id="caesuras-enabled" type="button" class="reading-toggle" aria-pressed="false" aria-controls="results">Césure</button>
+        </div>
+      </div>
+      <div id="sonorities-description" class="sonorities-description sonority-toolbar" hidden>
+        <div class="sonority-filters" role="group" aria-label="Sonorités visibles dans tout le texte">
+          <button type="button" id="sonority-alliterations" class="sonority-category-toggle" aria-pressed="true">Allitérations</button>
+          <button type="button" id="sonority-assonances" class="sonority-category-toggle" aria-pressed="true">Assonances</button>
+        </div>
+        <button type="button" id="sonority-singletons" class="sonority-category-toggle sonority-singletons-toggle" aria-pressed="false" aria-controls="results" title="Afficher ou masquer les sons présents une seule fois dans chaque vers">×1 : son isolé, teinte discrète</button>
+        <span>Cliquez sur un son pour repérer ses occurrences.</span>
+      </div>
+      <div class="verse-column-heads">
+        <span>Vers</span><span class="syllables-heading">Syllabes</span><span class="rhyme-heading">Rime</span>
+        <span class="scheme-heading">Disposition</span><span class="richness-heading">Richesse</span>
+      </div>
+      <div id="results" class="results"></div>
+    </section>
+    <p id="status" class="status" role="status" aria-live="polite">Préparation du lexique local…</p>
+    <footer>Lecture classique assistée <span aria-hidden="true">·</span> Fonctionne entièrement hors ligne</footer>
+    <details class="credits"><summary>Sources linguistiques</summary><p>Référentiel : Wiktionnaire, « Français moderne traditionnel ». Lexique local adapté du JSONL fourni et de <a href="https://www.lexique.org/" target="_blank" rel="noopener noreferrer">Lexique 4.1</a>, Boris New, Christophe Pallier et collaborateurs ; données Lexique adaptées sous <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>. Complément sélectionné dans <a href="https://redac.univ-tlse2.fr/lexiques/glaff.html" target="_blank" rel="noopener noreferrer">GLÀFF 1.2.2</a>, Franck Sajous, Nabil Hathout et Basilio Calderone, sous <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a>. L’analyse des sonorités utilise les données intégrées.</p><p>Sonorités : exemple de Racine dans le <a href="https://www.dictionnaire-academie.fr/article/A9A1240" target="_blank" rel="noopener noreferrer">Dictionnaire de l’Académie française</a>. Lecture classique assistée : Gérald Purnelle, <a href="https://orbi.uliege.be/bitstream/2268/33658/1/Purnelle29.pdf" target="_blank" rel="noopener noreferrer">La langue des vers</a>, Université de Liège, JADT 2006 ; <a href="https://www.larousse.fr/dictionnaires/francais/di%C3%A9r%C3%A8se/25391" target="_blank" rel="noopener noreferrer">Larousse, diérèse</a>. Les variantes sont proposées explicitement ; aucun mètre n’est imposé.</p><details><summary>Notice GLÀFF</summary><pre class="source-notice">GLÀFF est un lexique développé à CLLE-ERSS (UMR 5263, http://w3.erss.univ-tlse2.fr/)
+par Franck Sajous, Nabil Hathout et Basilio Calderone.
+
+LICENCE
+
+GLÀFF est construit à partir du Wiktionnaire (http://fr.wiktionary.org) et est distribué sous licence Creative Commons By-SA 3.0 (Attribution - Partage dans les Mêmes Conditions 3.0 non transposé).
+Le résumé de cette licence est disponible à l'adresse :
+http://creativecommons.org/licenses/by-sa/3.0/deed.fr
+Le texte complet est disponible ici :
+http://creativecommons.org/licenses/by-sa/3.0/legalcode
+
+La page du projet GLÀFF est accessible à l'adresse suivante :
+http://redac.univ-tlse2.fr/lexiques/glaff.html
+
+Si vous redistribuez cette ressource, modifiée ou à l'identique, elle doit être accompagnée de ce présent texte.
+
+
+DESCRIPTION
+
+GLÀFF a la structure suivante :
+Chaque ligne du fichier décrit une entrée.
+Une entrée comporte des champs séparés par le caractère | ("pipe", ou "barre verticale")
+1) une forme graphique
+2) une description morphosyntaxique au format GRACE
+3) un lemme
+4) 0, 1 ou plusieurs prononciations (séparées par un point-virgule) en API
+5) les prononciations équivalentes en SAMPA
+
+Ces champs sont complétés par les fréquences absolues et relatives des formes et lemmes en corpus :
+6) fréquence absolue de la forme catégorisée dans le corpus Frantext 20e
+7) fréquence relative (par million de mots) de la forme catégorisée dans le corpus Frantext 20e
+8) fréquence absolue du lemme catégorisé dans le corpus Frantext 20e
+9) fréquence relative (par million de mots) du lemme catégorisé dans le corpus Frantext 20e
+10) fréquence absolue de la forme catégorisée dans le corpus LM10
+11) fréquence relative (par million de mots) de la forme catégorisée dans le corpus LM10
+12) fréquence absolue du lemme catégorisé dans le corpus LM10
+13) fréquence relative (par million de mots) du lemme catégorisé dans le corpus LM10
+14) fréquence absolue de la forme catégorisée dans le corpus FrWaC
+15) fréquence relative (par million de mots) de la forme catégorisée dans le corpus FrWaC
+16) fréquence absolue du lemme catégorisé dans le corpus FrWaC
+17) fréquence relative (par million de mots) du lemme catégorisé dans le corpus FrWaC
+
+Depuis la version 1.2.1, les formes qualifiées de viellies, désuettes,  obsolètes, archaïques, ou correpondant à une orthographe ancienne font l'objet d'un lexique séparé.
+
+
+CITER GLÀFF
+
+Franck Sajous, Nabil Hathout et Basilio Calderone. (2013). GLÀFF, un Gros Lexique À tout Faire du Français. Actes de la conférence Traitement Automatique des Langues Naturelles (TALN 2013).
+@InProceedings{sajous:glaff:taln13,
+  author    = {Sajous, Franck and Hathout, Nabil and Calderone, Basilio},
+  title     = {{GL\'{A}FF}, un {G}ros {L}exique \'{A} tout {F}aire du {F}ran\c{c}ais},
+  booktitle = {Actes de la 20e conf\'{e}rence sur le Traitement Automatique des Langues Naturelles (TALN'2013)},
+  year      = {2013},
+  address   = {Les Sables d'Olonne, France},
+  pages     = {285--298}
+}
+
+L'article est disponible ici :
+http://redac.univ-tlse2.fr/lexiques/glaff/glaff-taln2013.pdf
+</pre></details></details>
+  </main>
+<script id="syllaber-lexicon">{{SYLLABER_LEXICON}}</script>
+<script id="syllaber-engine">{{SYLLABER_ENGINE}}</script>
+  <script type="module">{{MODULES}}</script>
+</body>
+</html>
