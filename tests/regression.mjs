@@ -68,6 +68,7 @@ input.setRangeText = (replacement, start, end, selectionMode) => {
 ids['syllables-enabled'].setAttribute('aria-pressed', 'true');
 ids['rhymes-enabled'].setAttribute('aria-pressed', 'true');
 ids['classical-enabled'].setAttribute('aria-pressed', 'false');
+ids['numbering-enabled'].setAttribute('aria-pressed', 'false');
 
 let script = [...html.matchAll(/<script\b([^>]*)>/gu)]
   .map(match => [null, match[1], html.slice(match.index + match[0].length, html.indexOf('</script>', match.index))])
@@ -110,7 +111,8 @@ assert.equal(rows[1].querySelector('.verse-count').textContent, '2 à 3');
 assert.equal(rows[1].querySelector('.verse-rhyme').textContent, 'F / M');
 assert.equal(rows[4].querySelector('.verse-count').textContent, '12');
 assert.equal(rows[4].querySelector('.verse-rhyme').textContent, 'Fem.');
-assert.deepEqual(rows[4].children.slice(0, 3).map(cell => cell.className.split(' ')[0]), ['verse-entry','verse-count','verse-rhyme']);
+assert.deepEqual(rows[4].children.slice(0, 4).map(cell => cell.className.split(' ')[0]), ['verse-number','verse-entry','verse-count','verse-rhyme']);
+assert.deepEqual(rows.map(row => row.querySelector('.verse-number').textContent), ['1', '2', '3', '4', '5']);
 assert.equal(results.querySelectorAll('.verse-help').length, 0);
 assert.equal(results.querySelectorAll('.verse-meter-note').length, 0);
 assert.equal(results.querySelectorAll('.line-phonetic').length, 0);
@@ -344,6 +346,14 @@ assert.match(ids.status.textContent, /^Prêt\./u);
 const example = readFileSync(new URL('../docs/examples/le-bateau-ivre.txt', import.meta.url), 'utf8').trim();
 const exampleRows = await analyze(example);
 assert.equal(exampleRows.length, 100);
+ids['numbering-enabled'].invoke('click');
+assert.equal(ids['numbering-enabled'].getAttribute('aria-pressed'), 'true');
+assert.equal(ids['result-section'].dataset.numbering, 'true');
+assert.equal(ids['result-section'].style.get('--verse-number-digits'), '3');
+assert.deepEqual([0, 4, 99].map(index => exampleRows[index].querySelector('.verse-number').textContent), ['1', '5', '100']);
+assert.equal(results.children, exampleRows);
+ids['numbering-enabled'].invoke('click');
+assert.equal(ids['result-section'].dataset.numbering, 'false');
 assert.equal(ids.status.textContent, '100 vers analysés.');
 assert.equal(ids['result-section'].hidden, false);
 assert.deepEqual([8, 10, 93].map(index => exampleRows[index].querySelector('.verse-rhyme-letter').textContent),

@@ -249,6 +249,7 @@ function render(result) {
   for(const kind of ['alliterations','assonances'])$('sonority-'+kind).setAttribute('aria-pressed',categoryState(kind));
   const fragment = document.createDocumentFragment();
   let previousVerse = -1;
+  let verseNumber = 0;
   for (const [lineIndex,line] of result.lines.entries()) {
     if (!line.original.trim()) continue;
     const row = document.createElement('article');
@@ -256,6 +257,10 @@ function render(result) {
     row.dataset.lineIndex = lineIndex;
     if (previousVerse >= 0 && lineIndex > previousVerse + 1) row.classList.add('stanza-start');
     previousVerse = lineIndex;
+    const number = document.createElement('span');
+    number.className = 'verse-number';
+    number.textContent = String(++verseNumber);
+    row.append(number);
     const original = document.createElement('div');
     original.className = 'line-original';
     const {meter, caesuras, rhymes} = verseDetails[lineIndex];
@@ -297,6 +302,7 @@ function render(result) {
   }
   $('results').replaceChildren(fragment);
   renderSonoritySummary(soundAnalysis);
+  $('result-section').style.setProperty('--verse-number-digits', String(Math.max(2, String(verseNumber).length)));
   $('result-section').hidden = false;
 }
 
@@ -443,6 +449,7 @@ function bindOverlay(buttonId, overlay, afterToggle) {
 }
 bindOverlay('syllables-enabled', 'syllables');
 bindOverlay('classical-enabled', 'classical');
+bindOverlay('numbering-enabled', 'numbering');
 bindOverlay('rhymes-enabled', 'rhymes', () => {
   if (currentResult) render(currentResult);
 });
