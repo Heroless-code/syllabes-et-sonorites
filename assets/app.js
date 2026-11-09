@@ -3157,13 +3157,23 @@ function toggleSonorityCategory(kind,lineIndex){
 async function run(event) {
   event?.preventDefault();
   const text = $('input-text').value.replace(/\r\n|[\r\u2028\u2029]/gu, '\n');
-  if (!text.trim()) { $('input-text').focus(); $('status').textContent = 'Saisissez un texte à analyser.'; return; }
+  const status = $('status');
+  status.classList.remove('error');
+  if (!text.trim()) {
+    currentResult = null;
+    verseDetails = [];
+    $('results').replaceChildren();
+    renderSonoritySummary(null);
+    $('result-section').hidden = true;
+    $('input-text').focus();
+    status.textContent = 'Saisissez un texte à analyser.';
+    return;
+  }
   const revision = inputRevision;
   const button = $('transcribe-button');
   button.disabled = true;
   button.textContent = 'Analyse…';
-  $('status').classList.remove('error');
-  $('status').textContent = '';
+  status.textContent = '';
   await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
   try {
     if (revision !== inputRevision) return;
@@ -3185,10 +3195,10 @@ async function run(event) {
     sonorityVerseCategories.clear();
     render(result);
     const verseCount = result.lines.filter(line => line.original.trim()).length;
-    $('status').textContent = `${verseCount.toLocaleString('fr-FR')} ${verseCount === 1 ? 'vers analysé' : 'vers analysés'}.`;
+    status.textContent = `${verseCount.toLocaleString('fr-FR')} ${verseCount === 1 ? 'vers analysé' : 'vers analysés'}.`;
   } catch (error) {
-    $('status').classList.add('error');
-    $('status').textContent = 'L’analyse a rencontré une difficulté. Réessayez avec un passage plus court.';
+    status.classList.add('error');
+    status.textContent = 'L’analyse a rencontré une difficulté. Réessayez avec un passage plus court.';
     console.error(error);
   } finally { button.disabled = false; button.textContent = 'Analyser'; }
 }
@@ -3202,15 +3212,15 @@ function syncEditButtons() {
 
 function handleTextEdit() {
   inputRevision++;
-  currentResult = null;
-  verseDetails = [];
-  $('results').replaceChildren();
-  renderSonoritySummary(null);
-  $('result-section').hidden = true;
-  $('status').classList.remove('error');
-  $('status').textContent = inputText.value.trim()
-    ? 'Texte modifié. Cliquez sur Analyser.'
-    : 'Prêt. Le texte reste sur cet appareil.';
+  const status = $('status');
+  status.classList.remove('error');
+  if (currentResult) {
+    status.textContent = 'L’analyse affichée correspond au texte précédent. Cliquez sur Analyser pour l’actualiser.';
+  } else {
+    status.textContent = inputText.value.trim()
+      ? 'Texte modifié. Cliquez sur Analyser.'
+      : 'Prêt. Le texte reste sur cet appareil.';
+  }
   syncEditButtons();
 }
 
