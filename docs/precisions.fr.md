@@ -4,6 +4,8 @@ Ouvrez l’application en ligne ou décompressez le projet et ouvrez **downloads
 
 Après modification du texte, cliquez de nouveau sur **Analyser** pour obtenir les résultats correspondants.
 
+Sous **Analyser**, **Tout effacer** vide la zone de saisie. **Effacer la ligne** retire la ligne du curseur ou celle où commence la sélection. **Effacer la dernière ligne** retire la dernière ligne contenant du texte.
+
 ## Syllabes et rimes
 
 - Les barres `/` indiquent les frontières proposées par Syllaber dans le texte écrit. **Syllabes** affiche ou masque les barres et le compte syllabique. **Rimes** commande les colonnes **Rime**, **Disposition** et **Richesse**, ainsi que les traits dorés des rimes internes.
@@ -45,9 +47,10 @@ Le **trait doré** couvre les lettres associées aux phonèmes communs à la fin
 ## Sonorités
 
 - Une **allitération** répète un son consonantique dans un vers. Une **assonance** répète un son vocalique. Les pastilles indiquent des sons individuels et leur nombre d’occurrences. Le survol donne aussi le nombre de mots concernés. Un son peut se répéter dans un seul mot.
-- Un clic sur une pastille isole le son dans le texte. Un deuxième clic masque sa couleur. Un autre clic la rétablit. **×1** ajoute les sons isolés dans une teinte discrète.
+- Un clic sur une pastille ajoute le son à la sélection du vers. Plusieurs sons peuvent rester isolés ensemble. Un deuxième clic sur la même pastille masque sa couleur et un troisième la rétablit. **×1** ajoute les sons présents une seule fois dans une teinte discrète.
 - Les sons sont comptés à partir de la prononciation proposée. Une liaison réalisée compte une fois. Un groupe de lettres peut porter plusieurs sons. Si l’association entre un son et les lettres est incertaine, l’occurrence peut être comptée sans être surlignée.
 - Les décomptes sont propres à chaque vers. Les parties d’un mot séparées par une apostrophe d’élision ou un trait d’union peuvent être regroupées pour le nombre de mots concernés.
+- Le récapitulatif **Sonorités remarquables** réunit les vers où un même son apparaît au moins quatre fois. Les allitérations et les assonances sont présentées ensemble, avec leurs décomptes, dans l’ordre du texte. Les filtres de surbrillance agissent sur l’affichage des vers.
 
 ## Règle classique
 

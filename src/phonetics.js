@@ -1987,14 +1987,13 @@ return {SONORITY_PHONES,sonorityStyle,applySonorityStyle};
 })();
 __modules["sonorities-view.js"]=(()=>{
 const {phones}=__modules["phonology.js"];
-const {applySonorityStyle,sonorityStyle}=__modules["sonority-colors.js"];
+const {applySonorityStyle}=__modules["sonority-colors.js"];
 
 const groupsFor=analysis=>analysis.soundGroups||analysis.groups;
-function markSounds(row,analysis,categories,hiddenPhones,showSingletons){
+function markSounds(row,visibleGroups,focusedPhones){
   const original=new Map();
   const add=(map,key,group)=>{if(!map.has(key))map.set(key,new Map());map.get(key).set(group.phone,group);};
-  const inventory=groupsFor(analysis);
-  for(const group of [...(categories.alliterations?inventory.alliterations:[]),...(categories.assonances?inventory.assonances:[])].filter(g=>!hiddenPhones.has(g.phone)&&(showSingletons||g.count>1)))for(const occurrence of group.occurrences){
+  for(const group of visibleGroups)for(const occurrence of group.occurrences){
     for(const span of occurrence.graphSpans)add(original,span.tokenIndex+':'+span.segmentIndex,group);
   }
   for(const node of row.querySelectorAll('.sonority-unit')){
@@ -2003,15 +2002,18 @@ function markSounds(row,analysis,categories,hiddenPhones,showSingletons){
     if(node.dataset.sonorityPhones)node.removeAttribute('title');
     delete node.dataset.sonorityPhones;delete node.dataset.sonoritySinglePhones;
     for(const name of ['background','ink','accent','bands'])node.style.removeProperty('--sonority-'+name);
-    const groups=[...original.get(node.dataset.tokenIndex+':'+node.dataset.segmentIndex)?.values()||[]];
+    const matches=[...original.get(node.dataset.tokenIndex+':'+node.dataset.segmentIndex)?.values()||[]];
+    const groups=focusedPhones.size?matches.filter(group=>focusedPhones.has(group.phone)):matches;
     const consonant=groups.some(g=>g.kind==='alliteration'),vowel=groups.some(g=>g.kind==='assonance');
+    node.classList.toggle('sonority-hit',focusedPhones.size>0&&groups.length>0);
+    node.classList.toggle('sonority-muted',focusedPhones.size>0&&groups.length===0);
     node.classList.toggle('sonority-overview',groups.length>0);
     node.classList.toggle('sonority-alliteration',consonant);
     node.classList.toggle('sonority-assonance',vowel);
     node.classList.toggle('sonority-singleton',groups.length>0&&groups.every(g=>g.count===1));
     if(groups.length){
       node.dataset.sonorityPhones=JSON.stringify(groups.map(g=>g.phone));
-      const singlePhones=groups.filter(g=>g.count===1).map(g=>g.phone);
+      const singlePhones=focusedPhones.size?[]:groups.filter(g=>g.count===1).map(g=>g.phone);
       node.dataset.sonoritySinglePhones=JSON.stringify(singlePhones);
       applySonorityStyle(node,groups.map(g=>g.phone),{singlePhones});
       node.title=groups.map(g=>(g.count===1?'Son isolé':g.kind==='alliteration'?'Allitération':'Assonance')+' /'+g.phone+'/ — '+g.count+' '+(g.count===1?'occurrence':'occurrences')+' dans '+g.wordCount+' '+(g.wordCount===1?'mot':'mots')).join('\n');
@@ -2020,30 +2022,17 @@ function markSounds(row,analysis,categories,hiddenPhones,showSingletons){
 }
 
 /** Presentation only. Counts and source associations come from sonorities.js. */
-function focusSonority(row,analysis,phone,{hiddenPhones=new Set(),categories={alliterations:true,assonances:true},showSingletons=false}={}){
-  markSounds(row,analysis,categories,hiddenPhones,showSingletons);
+function focusSonority(row,analysis,selected=new Set(),{hiddenPhones=new Set(),categories={alliterations:true,assonances:true},showSingletons=false}={}){
   const inventory=groupsFor(analysis),all=[...inventory.alliterations,...inventory.assonances];
-  const group=all.find(g=>g.phone===phone&&!hiddenPhones.has(g.phone)&&(showSingletons||g.count>1)&&categories[g.kind==='assonance'?'assonances':'alliterations']);
-  const original=new Set();
-  if(group)for(const occurrence of group.occurrences){
-    for(const span of occurrence.graphSpans)original.add(span.tokenIndex+':'+span.segmentIndex);
-  }
-  row.classList.toggle('has-sonority-selection',Boolean(group));
-  for(const node of row.querySelectorAll('.sonority-unit')){
-    const hit=Boolean(group)&&original.has(node.dataset.tokenIndex+':'+node.dataset.segmentIndex);
-    node.classList.toggle('sonority-hit',hit);
-    node.classList.toggle('sonority-muted',Boolean(group)&&!hit);
-    if(hit){
-      node.dataset.sonorityFocus=group.kind;
-      const style=sonorityStyle(group.phone);
-      if(style){node.style.setProperty('--sonority-focus-background',style.background);node.style.setProperty('--sonority-focus-ink',style.ink);node.style.setProperty('--sonority-focus-accent',style.accent);}
-    }else delete node.dataset.sonorityFocus;
-  }
+  const visible=all.filter(g=>!hiddenPhones.has(g.phone)&&(showSingletons||g.count>1)&&categories[g.kind==='assonance'?'assonances':'alliterations']);
+  const focusedPhones=new Set(visible.filter(g=>selected.has(g.phone)).map(g=>g.phone));
+  markSounds(row,visible,focusedPhones);
+  row.classList.toggle('has-sonority-selection',focusedPhones.size>0);
   for(const chip of row.querySelectorAll('.sonority-chip')){
-    const focused=Boolean(group)&&chip.dataset.phone===group.phone,hidden=hiddenPhones.has(chip.dataset.phone);
+    const focused=focusedPhones.has(chip.dataset.phone),hidden=hiddenPhones.has(chip.dataset.phone);
     const sound=all.find(g=>g.phone===chip.dataset.phone),annotations=chip.dataset.annotations||'';
     const description='/'+sound.phone+'/ — '+sound.count+' '+(sound.count===1?'occurrence':'occurrences')+' dans '+sound.wordCount+' '+(sound.wordCount===1?'mot':'mots');
-    const status=hidden?'Couleur masquée. Cliquez pour la rétablir.':focused?'Son mis en évidence. Cliquez pour masquer sa couleur.':'Couleur affichée. Cliquez pour isoler ce son ; un deuxième clic masque sa couleur.';
+    const status=hidden?'Couleur masquée. Cliquez pour la rétablir.':focused?'Son isolé. Cliquez pour masquer sa couleur.':'Cliquez pour ajouter ce son à la sélection.';
     chip.dataset.sonorityState=hidden?'hidden':focused?'focused':'visible';
     chip.classList.toggle('sonority-hidden',hidden);
     chip.setAttribute('aria-pressed',String(focused));

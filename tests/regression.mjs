@@ -55,6 +55,16 @@ const ids = Object.fromEntries([...html.split('</main>')[0].matchAll(/\bid="([^"
 document.getElementById = id => ids[id];
 document.createElement = () => new Element();
 document.createDocumentFragment = () => Object.assign(new Element(), {fragment:true});
+const input = ids['input-text'];
+input.value = '';
+input.selectionStart = 0;
+input.selectionEnd = 0;
+input.focus = () => {};
+input.setRangeText = (replacement, start, end, selectionMode) => {
+  assert.equal(selectionMode, 'start');
+  input.value = input.value.slice(0, start) + replacement + input.value.slice(end);
+  input.selectionStart = input.selectionEnd = start;
+};
 ids['syllables-enabled'].setAttribute('aria-pressed', 'true');
 ids['rhymes-enabled'].setAttribute('aria-pressed', 'true');
 ids['classical-enabled'].setAttribute('aria-pressed', 'false');
@@ -355,5 +365,89 @@ for (const [index, text] of exampleStanzas.entries()) {
   assert.ok(stanzaRows.every(row => row.querySelector('.richness-badge')), 'Richesse du quatrain ' + (index + 1));
   assert.ok(dispositionLabels(stanzaRows[0]).includes('Croisées'), 'Disposition du quatrain ' + (index + 1));
 }
+if (ids['sonorities-enabled'].getAttribute('aria-pressed') !== 'true') ids['sonorities-enabled'].invoke('click');
+const summary = ids['sonority-summary'];
+const summaryList = ids['sonority-summary-list'];
+const summaryEmpty = ids['sonority-summary-empty'];
+const belowThreshold = 'Pas, par, part.';
+const notableLines = ['Pas, pile, peau, poule.', 'Rat, chat, pas, drap, chat.', 'Pas, par, pal, part.'];
+await analyze([belowThreshold, notableLines[0], '', ...notableLines.slice(1)].join('\n'));
+const listedVerses = () => summaryList.children.map(item => ({
+  number: item.querySelector('.notable-number').textContent,
+  text: item.querySelector('.notable-text').textContent,
+  groups: item.querySelectorAll('.notable-group').map(group => [
+    group.querySelector('.notable-category').textContent,
+    ...group.querySelectorAll('.notable-sound').map(sound => sound.textContent)
+  ])
+}));
+const expectedSummary = [
+  {number:'Vers 2', text:notableLines[0], groups:[['Allitérations', '/p/ ×4']]},
+  {number:'Vers 3', text:notableLines[1], groups:[['Assonances', '/a/ ×5']]},
+  {number:'Vers 4', text:notableLines[2], groups:[['Allitérations', '/p/ ×4'], ['Assonances', '/a/ ×4']]}
+];
+assert.equal(summary.hidden, false);
+assert.equal(summaryEmpty.hidden, true);
+assert.deepEqual(listedVerses(), expectedSummary);
+ids['sonority-alliterations'].invoke('click');
+assert.deepEqual(listedVerses(), expectedSummary);
+ids['sonority-alliterations'].invoke('click');
+ids['sonorities-enabled'].invoke('click');
+assert.equal(summary.hidden, true);
+assert.equal(summaryList.children.length, 0);
+ids['sonorities-enabled'].invoke('click');
+assert.deepEqual(listedVerses(), expectedSummary);
+await analyze(belowThreshold);
+assert.equal(summaryEmpty.hidden, false);
+assert.equal(summaryList.children.length, 0);
+ids['input-text'].invoke('input');
+assert.equal(summary.hidden, true);
+
+await analyze('Pas, par, pal, part.\nPas, par, pal, part.');
+const chipFor = phone => results.children[0].querySelectorAll('.sonority-chip').find(chip => chip.dataset.phone === phone);
+const focusedSounds = () => [...new Set(results.children[0].querySelectorAll('.sonority-hit')
+  .flatMap(node => JSON.parse(node.dataset.sonorityPhones)))].sort();
+for (const phone of ['p', 'a', 'ʁ']) chipFor(phone).invoke('click');
+assert.deepEqual(focusedSounds(), ['a', 'p', 'ʁ']);
+assert.deepEqual(['p', 'a', 'ʁ'].map(phone => chipFor(phone).getAttribute('aria-pressed')), ['true', 'true', 'true']);
+assert.equal(results.children[1].querySelectorAll('.sonority-hit').length, 0);
+chipFor('p').invoke('click');
+assert.equal(chipFor('p').dataset.sonorityState, 'hidden');
+assert.deepEqual(focusedSounds(), ['a', 'ʁ']);
+chipFor('p').invoke('click');
+assert.equal(chipFor('p').dataset.sonorityState, 'visible');
+assert.deepEqual(focusedSounds(), ['a', 'ʁ']);
+ids['sonority-alliterations'].invoke('click');
+assert.deepEqual(focusedSounds(), ['a']);
+ids['sonority-alliterations'].invoke('click');
+assert.deepEqual(focusedSounds(), ['a']);
+ids['sonority-singletons'].invoke('click');
+chipFor('l').invoke('click');
+assert.deepEqual(focusedSounds(), ['a', 'l']);
+ids['sonority-singletons'].invoke('click');
+assert.deepEqual(focusedSounds(), ['a']);
+
+await analyze('Un\n\nDeux 😀\nTrois\n');
+input.selectionStart = 'Un\n\nDe'.length;
+input.selectionEnd = input.value.length;
+ids['clear-line'].invoke('click');
+assert.equal(input.value, 'Un\n\nTrois\n');
+assert.equal(input.selectionStart, 'Un\n\n'.length);
+assert.equal(input.selectionEnd, input.selectionStart);
+assert.equal(ids['result-section'].hidden, true);
+assert.equal(summary.hidden, true);
+assert.equal(ids.status.textContent, 'Texte modifié. Cliquez sur Analyser.');
+input.value = 'Un\nDeux\n\n';
+input.selectionStart = input.selectionEnd = 0;
+ids['clear-last-line'].invoke('click');
+assert.equal(input.value, 'Un\n\n');
+input.value = 'Un\r\nDeux\u2028Trois';
+ids['clear-last-line'].invoke('click');
+assert.equal(input.value, 'Un\r\nDeux');
+await analyze('Un\nDeux');
+ids['clear-text'].invoke('click');
+assert.equal(input.value, '');
+assert.equal(results.children.length, 0);
+assert.equal(summaryList.children.length, 0);
+assert.ok(['clear-text', 'clear-line', 'clear-last-line'].every(id => ids[id].disabled));
 console.log('Régressions et exemple complet du Bateau ivre vérifiés.');
 

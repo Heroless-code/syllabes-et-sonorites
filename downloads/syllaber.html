@@ -60,15 +60,20 @@ textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#f
 .status{font:11px/1.5 Arial,sans-serif;color:var(--muted);min-height:17px;margin:18px 0 0}.status.error{color:#a24233}footer{font:10px Arial,sans-serif;color:#8a9590;margin-top:49px;padding-top:18px;border-top:1px solid #e4e8e4;display:flex;gap:9px;flex-wrap:wrap}.credits{font:10px/1.7 Arial,sans-serif;color:#7b8680;margin-top:9px}.credits>summary{display:inline;list-style:none}.credits>summary::-webkit-details-marker{display:none}.credits p{max-width:700px}.credits a{color:#426e63}.source-notice{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;max-width:100%}
 .sonorities-row{display:grid;grid-template-columns:240px minmax(0,1fr);column-gap:20px;align-items:start;padding:8px 0}.sonority-text{grid-column:2;grid-row:1;min-width:0}.sonorities-panel{grid-column:1;grid-row:1;min-width:0;margin:0;padding-right:12px;border-right:1px solid var(--line);display:grid;gap:6px;font:11px/1.6 Arial,sans-serif}.sonority-group{display:flex;flex-wrap:wrap;align-items:center;min-width:0;gap:3px}.sonority-group h3{font:600 9px/1.5 Arial,sans-serif;letter-spacing:0;color:var(--muted);margin:0 3px 0 0}.sonority-category-body,.sonority-list{display:contents}
 .sonority-chip{display:inline-flex;align-items:baseline;gap:3px;width:auto;max-width:100%;text-align:left;white-space:normal;overflow-wrap:anywhere;font:11px/1.4 Arial,sans-serif;padding:1px 4px;border-radius:3px;background:var(--sonority-background);color:var(--sonority-ink)}.sonority-chip:hover{box-shadow:inset 0 -1px var(--sonority-accent)}.sonority-chip[aria-pressed=true]{box-shadow:inset 0 -2px var(--sonority-accent)}.sonority-phone{font-size:11px;white-space:nowrap}.sonority-count{font-size:8.5px;white-space:nowrap}.sonority-distributed .sonority-phone{font-weight:600}.sonority-chip.sonority-uncertain{text-decoration:underline dotted;text-underline-offset:3px}.sonority-chip.sonority-hidden,.sonority-chip.sonority-hidden:hover{background:#edf0ec;color:#566560;box-shadow:inset 0 0 0 1px #d4dcd5;text-decoration:none}.sonority-hidden .sonority-phone{text-decoration:line-through}.sonority-empty{margin:0;font-size:9px;line-height:1.4;color:#788486}
-.sonority-unit,.sonority-overview{box-decoration-break:clone;-webkit-box-decoration-break:clone}.sonority-overview{background:var(--sonority-bands,var(--sonority-background));color:var(--sonority-ink);border-radius:2px;box-shadow:inset 0 -1px var(--sonority-accent)}.sonority-overview.sonority-singleton{box-shadow:none}.sonority-hit[data-sonority-focus]{background:var(--sonority-focus-background);color:var(--sonority-focus-ink);box-shadow:inset 0 -2px var(--sonority-focus-accent)}.sonority-muted{background:transparent!important;box-shadow:none!important;color:#657174}.has-sonority-selection .word-uncertain{text-decoration-color:#a4a9a6}
+.sonority-unit,.sonority-overview{box-decoration-break:clone;-webkit-box-decoration-break:clone}.sonority-overview{background:var(--sonority-bands,var(--sonority-background));color:var(--sonority-ink);border-radius:2px;box-shadow:inset 0 -1px var(--sonority-accent)}.sonority-overview.sonority-singleton{box-shadow:none}.sonority-overview.sonority-hit{box-shadow:inset 0 -2px var(--sonority-accent)}.sonority-muted{background:transparent!important;box-shadow:none!important;color:#657174}.has-sonority-selection .word-uncertain{text-decoration-color:#a4a9a6}
 
 .sonorities-description{font:10px/1.7 Arial,sans-serif;color:var(--muted);margin:9px 0 4px}.sonority-toolbar{position:sticky;top:0;z-index:8;display:flex;align-items:center;flex-wrap:wrap;gap:5px 16px;padding:7px 0;background:#f6f7f5ed;backdrop-filter:blur(5px);border-bottom:1px solid #e6eae7}.sonority-filters{display:flex;align-items:center;gap:12px}.sonority-category-toggle{display:inline-flex;align-items:center;gap:4px;padding:0;background:none;color:var(--muted);font:inherit;line-height:1.5;text-align:left;border-radius:2px}.sonority-category-toggle::before{content:'';width:5px;height:5px;flex:none;border:1px solid #879b8f;border-radius:50%}.sonority-category-toggle[aria-pressed=true]{color:#3d584b}.sonority-category-toggle[aria-pressed=true]::before{background:#668677}.sonority-category-toggle[aria-pressed=mixed]::before{background:linear-gradient(to right,#668677 50%,transparent 50%)}.sonority-category-toggle[aria-pressed=false]{color:#7b8580}.sonority-category-toggle:hover{text-decoration:underline;text-underline-offset:3px}.sonority-filters .sonority-category-toggle{font-size:11px}.sonority-singletons-toggle{padding:2px 5px;border:1px solid transparent}.sonority-singletons-toggle[aria-pressed=true]{background:#e6ece6;border-color:#c8d5cc}
 @media(min-width:651px) and (max-width:900px){.sonorities-row{grid-template-columns:205px minmax(0,1fr);column-gap:16px}.sonorities-panel{padding-right:10px}}
 @media(max-width:650px){.workspace{padding:30px 21px 22px}.title-break{display:initial}h1{letter-spacing:-.85px}.intro{font-size:13px;margin-bottom:23px}textarea{padding:15px;min-height:195px}.actions{gap:12px}.mode-controls{font-size:11px}#transcribe-button{padding:13px 17px;min-width:117px;font-size:12px}.submit-control{gap:12px}.keyboard-hint{font-size:9px}.result-section{margin-top:33px}.sonorities-row{display:flex;flex-direction:column;gap:6px}.sonority-text{width:100%;order:0}.sonorities-panel{width:100%;order:1;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px;row-gap:5px;padding:0;border:0}footer{margin-top:34px}}
 @media print{body{background:#fff}.workspace{max-width:none;padding:0}form,.masthead,.result-header,.status,footer{display:none!important}.result-section{margin:0}.line-result{break-inside:avoid}.sonority-overview,.sonority-chip{-webkit-print-color-adjust:exact;print-color-adjust:exact}.sonority-toolbar{position:static;backdrop-filter:none}}
 
-.workspace{--details-width:calc(5.1rem + 4.3rem + 6.5rem + 5.5rem);max-width:1460px}
-.masthead,#transcription-form,footer,.credits,#status,.about{width:min(956px,calc(100% - var(--details-width)))}
+.actions{row-gap:8px}
+.input-edit-controls{display:flex;flex-wrap:wrap;gap:6px}
+.edit-button{min-height:30px;padding:6px 10px;border:1px solid #cbd8d0;border-radius:6px;background:#fff;color:var(--accent);font:600 11px/1.3 Arial,sans-serif}
+.edit-button:hover:not(:disabled){background:#e4eee8;border-color:#a8c1b1}
+.edit-button:disabled{opacity:.55;cursor:default}
+.workspace{--details-width:calc(5.1rem + 4.3rem + 6.5rem + 5.5rem);--verse-font:ui-monospace,"Cascadia Code","SFMono-Regular",Consolas,"Liberation Mono",monospace;max-width:1460px}
+.masthead,#transcription-form,footer,.credits,#status,.about,.sonority-summary{width:min(956px,calc(100% - var(--details-width)))}
 .product-subtitle{font-size:20px;line-height:1.3;margin:6px 0 0;color:var(--muted)}
 .about{margin-top:35px;padding-top:23px;border-top:1px solid var(--line);font:14px/1.65 Georgia,serif;color:var(--muted)}
 .about h2{font:400 21px/1.3 Georgia,serif;color:var(--ink);margin:0 0 12px}
@@ -84,7 +89,6 @@ textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#f
 .reading-toggle:hover{border-color:#477d70}
 .reading-toggle span{display:inline-block;margin-right:2px;min-width:9px;text-align:center}
 .result-section{
-  --verse-font:ui-monospace,"Cascadia Code","SFMono-Regular",Consolas,"Liberation Mono",monospace;
   --count-width:5.1rem;
   --rhyme-width:4.3rem;
   --scheme-width:6.5rem;
@@ -97,7 +101,19 @@ textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#f
 }
 .verse-column-heads,.line-result{display:grid;grid-template-columns:var(--verse-track) var(--count-track) var(--rhyme-track) var(--scheme-track) var(--richness-track)}
 .line-result{padding:4px 0}
-.line-result.stanza-start{margin-top:12px}
+.line-result.stanza-start{border-top:3px double #a3b1a8}
+.line-result:has(+ .stanza-start){border-bottom:0}
+.sonority-summary{margin-top:20px;padding-top:17px;border-top:1px solid var(--line)}
+.sonority-summary h2{font:400 21px/1.3 Georgia,serif;color:var(--ink);margin:0}
+.notable-note,.notable-empty{font:12px/1.5 Arial,sans-serif;color:var(--muted);margin:6px 0 12px}
+.notable-list{list-style:none;margin:0;padding:0}
+.notable-verse{display:grid;grid-template-columns:3.5rem minmax(0,1fr);gap:8px;padding:8px 0;border-top:1px solid var(--line);break-inside:avoid}
+.notable-number{font:11px/1.65 Arial,sans-serif;color:var(--muted);font-variant-numeric:tabular-nums}
+.notable-text{font:13px/1.5 var(--verse-font);margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.notable-details{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:4px}
+.notable-group{display:flex;flex-wrap:wrap;align-items:center;gap:4px;font:11px/1.4 Arial,sans-serif}
+.notable-category{color:var(--muted);font-weight:600}
+.notable-sound{padding:1px 4px;border-radius:3px;background:var(--sonority-background,#edf0ec);color:var(--sonority-ink,var(--ink));white-space:nowrap}
 .classical-mark{display:none;position:absolute;inset-inline-end:calc(100% + 8px);top:50%;transform:translateY(-50%);width:1.25rem;text-align:center;font:700 18px/1 "Segoe UI Symbol","Segoe UI",sans-serif;color:#2b6b45}
 .classical-mark.irregular{color:#a43d34}
 .result-section[data-classical=true] .classical-mark{display:block}
@@ -132,7 +148,7 @@ textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#f
 .result-section[data-rhymes=false]{--rhyme-track:0px;--scheme-track:0px;--richness-track:0px}
 .result-section[data-rhymes=false] :is(.rhyme-heading,.scheme-heading,.richness-heading,.verse-rhyme,.verse-scheme,.verse-richness){display:none}
 @media(max-width:1100px){
-  .masthead,#transcription-form,footer,.credits,#status,.about{width:100%}
+  .masthead,#transcription-form,footer,.credits,#status,.about,.sonority-summary{width:100%}
   .verse-entry.sonorities-row{display:flex;flex-direction:column;gap:3px}
   .verse-entry .sonority-text{width:100%;order:0}
   .verse-entry .sonorities-panel{width:100%;order:1;padding:0 12px 0 0;border:0}
@@ -178,6 +194,11 @@ textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#f
           <button id="transcribe-button" type="submit" disabled>Chargement…</button>
           <span class="keyboard-hint">Ctrl + Entrée</span>
         </div>
+        <div class="input-edit-controls" role="group" aria-label="Effacer du texte">
+          <button id="clear-text" class="edit-button" type="button" aria-controls="input-text" disabled>Tout effacer</button>
+          <button id="clear-line" class="edit-button" type="button" aria-controls="input-text" title="Efface la ligne où commence la sélection ou se trouve le curseur." disabled>Effacer la ligne</button>
+          <button id="clear-last-line" class="edit-button" type="button" aria-controls="input-text" title="Efface la dernière ligne contenant du texte." disabled>Effacer la dernière ligne</button>
+        </div>
       </div>
     </form>
 
@@ -187,7 +208,7 @@ textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#f
         <div class="reading-controls" role="group" aria-label="Affichage des vers">
           <button id="syllables-enabled" type="button" class="reading-toggle" aria-pressed="true" aria-controls="results"><span aria-hidden="true">/</span> Syllabes</button>
           <button id="rhymes-enabled" type="button" class="reading-toggle" aria-pressed="true" aria-controls="results">Rimes</button>
-          <button id="sonorities-enabled" type="button" class="reading-toggle" aria-pressed="true" aria-controls="results"><span aria-hidden="true">●</span> Sonorités</button>
+          <button id="sonorities-enabled" type="button" class="reading-toggle" aria-pressed="true" aria-controls="results sonority-summary"><span aria-hidden="true">●</span> Sonorités</button>
           <button id="classical-enabled" type="button" class="reading-toggle" aria-pressed="false" aria-controls="results">Règle classique</button>
           <button id="caesuras-enabled" type="button" class="reading-toggle" aria-pressed="false" aria-controls="results">Césure</button>
         </div>
@@ -198,7 +219,7 @@ textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#f
           <button type="button" id="sonority-assonances" class="sonority-category-toggle" aria-pressed="true">Assonances</button>
         </div>
         <button type="button" id="sonority-singletons" class="sonority-category-toggle sonority-singletons-toggle" aria-pressed="false" aria-controls="results" title="Afficher ou masquer les sons présents une seule fois dans chaque vers">×1 : son isolé, teinte discrète</button>
-        <span>Cliquez sur un son pour repérer ses occurrences.</span>
+        <span>Cliquez sur plusieurs sons pour les isoler ensemble.</span>
       </div>
       <div class="verse-column-heads">
         <span>Vers</span><span class="syllables-heading">Syllabes</span><span class="rhyme-heading">Rime</span>
@@ -207,6 +228,12 @@ textarea{width:100%;min-height:185px;resize:vertical;display:block;background:#f
       <div id="results" class="results"></div>
     </section>
     <p id="status" class="status" role="status" aria-live="polite">Préparation du lexique local…</p>
+    <section id="sonority-summary" class="sonority-summary" aria-labelledby="sonority-summary-title" hidden>
+      <h2 id="sonority-summary-title">Sonorités remarquables</h2>
+      <p class="notable-note">Un même son répété au moins 4 fois dans un vers.</p>
+      <ul id="sonority-summary-list" class="notable-list" role="list"></ul>
+      <p id="sonority-summary-empty" class="notable-empty" hidden>Aucun vers n’atteint ce seuil.</p>
+    </section>
     <noscript><p class="intro">Activez JavaScript pour analyser votre texte avec Syllaber. L’analyse s’effectue sur votre appareil.</p></noscript>
     <section class="about" aria-labelledby="about-title">
       <h2 id="about-title">Compter les syllabes et analyser un poème</h2>
@@ -2620,14 +2647,13 @@ return {SONORITY_PHONES,sonorityStyle,applySonorityStyle};
 })();
 __modules["sonorities-view.js"]=(()=>{
 const {phones}=__modules["phonology.js"];
-const {applySonorityStyle,sonorityStyle}=__modules["sonority-colors.js"];
+const {applySonorityStyle}=__modules["sonority-colors.js"];
 
 const groupsFor=analysis=>analysis.soundGroups||analysis.groups;
-function markSounds(row,analysis,categories,hiddenPhones,showSingletons){
+function markSounds(row,visibleGroups,focusedPhones){
   const original=new Map();
   const add=(map,key,group)=>{if(!map.has(key))map.set(key,new Map());map.get(key).set(group.phone,group);};
-  const inventory=groupsFor(analysis);
-  for(const group of [...(categories.alliterations?inventory.alliterations:[]),...(categories.assonances?inventory.assonances:[])].filter(g=>!hiddenPhones.has(g.phone)&&(showSingletons||g.count>1)))for(const occurrence of group.occurrences){
+  for(const group of visibleGroups)for(const occurrence of group.occurrences){
     for(const span of occurrence.graphSpans)add(original,span.tokenIndex+':'+span.segmentIndex,group);
   }
   for(const node of row.querySelectorAll('.sonority-unit')){
@@ -2636,15 +2662,18 @@ function markSounds(row,analysis,categories,hiddenPhones,showSingletons){
     if(node.dataset.sonorityPhones)node.removeAttribute('title');
     delete node.dataset.sonorityPhones;delete node.dataset.sonoritySinglePhones;
     for(const name of ['background','ink','accent','bands'])node.style.removeProperty('--sonority-'+name);
-    const groups=[...original.get(node.dataset.tokenIndex+':'+node.dataset.segmentIndex)?.values()||[]];
+    const matches=[...original.get(node.dataset.tokenIndex+':'+node.dataset.segmentIndex)?.values()||[]];
+    const groups=focusedPhones.size?matches.filter(group=>focusedPhones.has(group.phone)):matches;
     const consonant=groups.some(g=>g.kind==='alliteration'),vowel=groups.some(g=>g.kind==='assonance');
+    node.classList.toggle('sonority-hit',focusedPhones.size>0&&groups.length>0);
+    node.classList.toggle('sonority-muted',focusedPhones.size>0&&groups.length===0);
     node.classList.toggle('sonority-overview',groups.length>0);
     node.classList.toggle('sonority-alliteration',consonant);
     node.classList.toggle('sonority-assonance',vowel);
     node.classList.toggle('sonority-singleton',groups.length>0&&groups.every(g=>g.count===1));
     if(groups.length){
       node.dataset.sonorityPhones=JSON.stringify(groups.map(g=>g.phone));
-      const singlePhones=groups.filter(g=>g.count===1).map(g=>g.phone);
+      const singlePhones=focusedPhones.size?[]:groups.filter(g=>g.count===1).map(g=>g.phone);
       node.dataset.sonoritySinglePhones=JSON.stringify(singlePhones);
       applySonorityStyle(node,groups.map(g=>g.phone),{singlePhones});
       node.title=groups.map(g=>(g.count===1?'Son isolé':g.kind==='alliteration'?'Allitération':'Assonance')+' /'+g.phone+'/ — '+g.count+' '+(g.count===1?'occurrence':'occurrences')+' dans '+g.wordCount+' '+(g.wordCount===1?'mot':'mots')).join('\n');
@@ -2653,30 +2682,17 @@ function markSounds(row,analysis,categories,hiddenPhones,showSingletons){
 }
 
 /** Presentation only. Counts and source associations come from sonorities.js. */
-function focusSonority(row,analysis,phone,{hiddenPhones=new Set(),categories={alliterations:true,assonances:true},showSingletons=false}={}){
-  markSounds(row,analysis,categories,hiddenPhones,showSingletons);
+function focusSonority(row,analysis,selected=new Set(),{hiddenPhones=new Set(),categories={alliterations:true,assonances:true},showSingletons=false}={}){
   const inventory=groupsFor(analysis),all=[...inventory.alliterations,...inventory.assonances];
-  const group=all.find(g=>g.phone===phone&&!hiddenPhones.has(g.phone)&&(showSingletons||g.count>1)&&categories[g.kind==='assonance'?'assonances':'alliterations']);
-  const original=new Set();
-  if(group)for(const occurrence of group.occurrences){
-    for(const span of occurrence.graphSpans)original.add(span.tokenIndex+':'+span.segmentIndex);
-  }
-  row.classList.toggle('has-sonority-selection',Boolean(group));
-  for(const node of row.querySelectorAll('.sonority-unit')){
-    const hit=Boolean(group)&&original.has(node.dataset.tokenIndex+':'+node.dataset.segmentIndex);
-    node.classList.toggle('sonority-hit',hit);
-    node.classList.toggle('sonority-muted',Boolean(group)&&!hit);
-    if(hit){
-      node.dataset.sonorityFocus=group.kind;
-      const style=sonorityStyle(group.phone);
-      if(style){node.style.setProperty('--sonority-focus-background',style.background);node.style.setProperty('--sonority-focus-ink',style.ink);node.style.setProperty('--sonority-focus-accent',style.accent);}
-    }else delete node.dataset.sonorityFocus;
-  }
+  const visible=all.filter(g=>!hiddenPhones.has(g.phone)&&(showSingletons||g.count>1)&&categories[g.kind==='assonance'?'assonances':'alliterations']);
+  const focusedPhones=new Set(visible.filter(g=>selected.has(g.phone)).map(g=>g.phone));
+  markSounds(row,visible,focusedPhones);
+  row.classList.toggle('has-sonority-selection',focusedPhones.size>0);
   for(const chip of row.querySelectorAll('.sonority-chip')){
-    const focused=Boolean(group)&&chip.dataset.phone===group.phone,hidden=hiddenPhones.has(chip.dataset.phone);
+    const focused=focusedPhones.has(chip.dataset.phone),hidden=hiddenPhones.has(chip.dataset.phone);
     const sound=all.find(g=>g.phone===chip.dataset.phone),annotations=chip.dataset.annotations||'';
     const description='/'+sound.phone+'/ — '+sound.count+' '+(sound.count===1?'occurrence':'occurrences')+' dans '+sound.wordCount+' '+(sound.wordCount===1?'mot':'mots');
-    const status=hidden?'Couleur masquée. Cliquez pour la rétablir.':focused?'Son mis en évidence. Cliquez pour masquer sa couleur.':'Couleur affichée. Cliquez pour isoler ce son ; un deuxième clic masque sa couleur.';
+    const status=hidden?'Couleur masquée. Cliquez pour la rétablir.':focused?'Son isolé. Cliquez pour masquer sa couleur.':'Cliquez pour ajouter ce son à la sélection.';
     chip.dataset.sonorityState=hidden?'hidden':focused?'focused':'visible';
     chip.classList.toggle('sonority-hidden',hidden);
     chip.setAttribute('aria-pressed',String(focused));
@@ -2742,6 +2758,7 @@ const { initialize, transcribe }=__modules["engine.js"];
 const {analyzeSonorities,isAssonance}=__modules["sonorities.js"];
 const {applyPoeticReading}=__modules["poetry.js"];
 const {renderSonorityPanel,focusSonority}=__modules["sonorities-view.js"];
+const {applySonorityStyle}=__modules["sonority-colors.js"];
 
 const $ = id => document.getElementById(id);
 let currentResult = null;
@@ -2758,6 +2775,7 @@ const sonorityHiddenPhones = new Map();
 const sonorityCategories={alliterations:true,assonances:true};
 const sonorityVerseCategories=new Map();
 const sonorityCache = new WeakMap();
+const notableSoundMinimum = 4;
 
 
 
@@ -3277,6 +3295,67 @@ function getSonorities(result) {
   return sonorityCache.get(result);
 }
 
+function renderSonoritySummary(analysis) {
+  const summary = $('sonority-summary');
+  const list = $('sonority-summary-list');
+  summary.hidden = !analysis;
+  if (!analysis) {
+    list.replaceChildren();
+    return;
+  }
+
+  const items = document.createDocumentFragment();
+  let verseNumber = 0;
+  let hasNotableVerses = false;
+  for (const line of analysis.lines) {
+    if (!line.original.trim()) continue;
+    verseNumber++;
+    const groups = [
+      ['Allitérations', line.groups.alliterations.filter(sound => sound.count >= notableSoundMinimum)],
+      ['Assonances', line.groups.assonances.filter(sound => sound.count >= notableSoundMinimum)]
+    ];
+    if (groups.every(([, sounds]) => sounds.length === 0)) continue;
+
+    const item = document.createElement('li');
+    item.className = 'notable-verse';
+    const number = document.createElement('span');
+    number.className = 'notable-number';
+    number.textContent = 'Vers ' + verseNumber;
+    const content = document.createElement('div');
+    const text = document.createElement('p');
+    text.className = 'notable-text';
+    text.textContent = line.original;
+    content.append(text);
+
+    const details = document.createElement('div');
+    details.className = 'notable-details';
+    for (const [label, sounds] of groups) {
+      if (sounds.length === 0) continue;
+      const group = document.createElement('div');
+      group.className = 'notable-group';
+      const name = document.createElement('span');
+      name.className = 'notable-category';
+      name.textContent = label;
+      group.append(name);
+      for (const sound of sounds) {
+        const badge = document.createElement('span');
+        badge.className = 'notable-sound';
+        badge.textContent = '/' + sound.phone + '/ ×' + sound.count;
+        applySonorityStyle(badge, [sound.phone]);
+        group.append(badge);
+      }
+      details.append(group);
+    }
+    content.append(details);
+    item.append(number, content);
+    items.append(item);
+    hasNotableVerses = true;
+  }
+  list.replaceChildren(items);
+  list.hidden = !hasNotableVerses;
+  $('sonority-summary-empty').hidden = hasNotableVerses;
+}
+
 function render(result) {
   currentResult = result;
   const soundAnalysis = sonoritiesEnabled ? getSonorities(result) : null;
@@ -3309,14 +3388,16 @@ function render(result) {
     renderRhymeAnalysis(row, rhymes);
     if(soundAnalysis){
       const analysis=soundAnalysis.lines[lineIndex];
-      const selected=sonoritySelections.get(lineIndex);
+      const selected=sonoritySelections.get(lineIndex)||new Set();
       const hiddenPhones=sonorityHiddenPhones.get(lineIndex)||new Set();sonorityHiddenPhones.set(lineIndex,hiddenPhones);
       const categories=sonorityVerseCategories.get(lineIndex)||{...sonorityCategories};sonorityVerseCategories.set(lineIndex,categories);
       renderSonorityPanel(entry,analysis,{selected,hiddenPhones,categories,showSingletons,onToggleCategory:kind=>toggleSonorityCategory(kind,lineIndex),onSelect:phone=>{
-        if(hiddenPhones.has(phone)){hiddenPhones.delete(phone);sonoritySelections.delete(lineIndex);}
-        else if(sonoritySelections.get(lineIndex)===phone){hiddenPhones.add(phone);sonoritySelections.delete(lineIndex);}
-        else sonoritySelections.set(lineIndex,phone);
-        focusSonority(entry,analysis,sonoritySelections.get(lineIndex),{hiddenPhones,categories,showSingletons});
+        if (hiddenPhones.has(phone)) hiddenPhones.delete(phone);
+        else if (selected.delete(phone)) hiddenPhones.add(phone);
+        else selected.add(phone);
+        if (selected.size) sonoritySelections.set(lineIndex, selected);
+        else sonoritySelections.delete(lineIndex);
+        focusSonority(entry,analysis,selected,{hiddenPhones,categories,showSingletons});
       }});
     }
     if (line.classicalRegular !== null) {
@@ -3332,6 +3413,7 @@ function render(result) {
     fragment.append(row);
   }
   $('results').replaceChildren(fragment);
+  renderSonoritySummary(soundAnalysis);
   $('result-section').hidden = false;
 }
 
@@ -3349,8 +3431,13 @@ function toggleSonorityCategory(kind,lineIndex){
   for(const [i,line]of (currentResult?.lines||[]).entries()){
     if(!line.original?.trim()||!global&&i!==lineIndex)continue;
     const categories=sonorityVerseCategories.get(i)||{...sonorityCategories};categories[kind]=enabled;sonorityVerseCategories.set(i,categories);
-    const phone=sonoritySelections.get(i);
-    if(!enabled&&phone&&(isAssonance(phone)?'assonances':'alliterations')===kind)sonoritySelections.delete(i);
+    const selected = sonoritySelections.get(i);
+    if (!enabled && selected) {
+      for (const phone of selected) {
+        if ((isAssonance(phone) ? 'assonances' : 'alliterations') === kind) selected.delete(phone);
+      }
+      if (!selected.size) sonoritySelections.delete(i);
+    }
   }
   if(currentResult)render(currentResult);
   if(!global)document.querySelector('.line-result[data-line-index="'+lineIndex+'"] .sonority-category-toggle[data-category="'+kind+'"]')?.focus({preventScroll:true});
@@ -3394,16 +3481,58 @@ async function run(event) {
   } finally { button.disabled = false; button.textContent = 'Analyser'; }
 }
 
-$('input-text').addEventListener('input', () => {
+const inputText = $('input-text');
+const editButtons = ['clear-text', 'clear-line', 'clear-last-line'].map($);
+
+function syncEditButtons() {
+  for (const button of editButtons) button.disabled = inputText.value.length === 0;
+}
+
+function handleTextEdit() {
   inputRevision++;
   currentResult = null;
   verseDetails = [];
   $('results').replaceChildren();
+  renderSonoritySummary(null);
   $('result-section').hidden = true;
   $('status').classList.remove('error');
-  $('status').textContent = $('input-text').value.trim()
+  $('status').textContent = inputText.value.trim()
     ? 'Texte modifié. Cliquez sur Analyser.'
     : 'Prêt. Le texte reste sur cet appareil.';
+  syncEditButtons();
+}
+
+function clearTextRange(start, end) {
+  if (start !== end) {
+    inputText.setRangeText('', start, end, 'start');
+    handleTextEdit();
+  }
+  inputText.focus({preventScroll:true});
+}
+
+function clearLineAt(caret) {
+  const {value} = inputText;
+  let start = 0;
+  let previousBreak = 0;
+  for (const separator of value.matchAll(/\r\n|[\r\n\u2028\u2029]/gu)) {
+    const end = separator.index + separator[0].length;
+    if (end > caret) {
+      clearTextRange(start, end);
+      return;
+    }
+    start = end;
+    previousBreak = separator.index;
+  }
+  clearTextRange(previousBreak, value.length);
+}
+
+inputText.addEventListener('input', handleTextEdit);
+syncEditButtons();
+$('clear-text').addEventListener('click', () => clearTextRange(0, inputText.value.length));
+$('clear-line').addEventListener('click', () => clearLineAt(inputText.selectionStart));
+$('clear-last-line').addEventListener('click', () => {
+  const {value} = inputText;
+  clearLineAt(value.trimEnd().length || value.length);
 });
 $('transcription-form').addEventListener('submit', run);
 $('input-text').addEventListener('keydown', event => {
@@ -3433,10 +3562,13 @@ for(const kind of ['alliterations','assonances'])$('sonority-'+kind).addEventLis
 $('sonority-singletons').addEventListener('click',()=>{
   showSingletons=!showSingletons;
   if(!showSingletons&&currentResult){
-    const analysis=sonorityCache.get(currentResult)||analyzeSonorities(currentResult);
-    for(const [line,phone]of sonoritySelections){
-      const sounds=analysis.lines[line]?.soundGroups;
-      if(sounds&&[...sounds.alliterations,...sounds.assonances].some(g=>g.phone===phone&&g.count===1))sonoritySelections.delete(line);
+    const analysis = getSonorities(currentResult);
+    for (const [line, selected] of sonoritySelections) {
+      const {alliterations, assonances} = analysis.lines[line].soundGroups;
+      for (const sound of [...alliterations, ...assonances]) {
+        if (sound.count === 1) selected.delete(sound.phone);
+      }
+      if (!selected.size) sonoritySelections.delete(line);
     }
   }
   if(currentResult)render(currentResult);
@@ -3453,6 +3585,7 @@ initialize().then(() => {
 });
 
 return {};
-})();</script>
+})();
+</script>
 </body>
 </html>

@@ -2,6 +2,8 @@
 
 Open the online application or **downloads/syllaber.html** in a recent browser, paste a French poem and select **Analyser**. The downloaded HTML is self-contained and works offline. A blank line separates stanzas. After editing the text, analyse it again to display the corresponding result.
 
+Below **Analyser**, the three clear buttons remove all text, the line at the caret or start of the selection, or the last non-empty line.
+
 ## Syllables and rhyme endings
 
 The / marks show the written-text boundaries proposed by Syllaber. **Syllabes** controls these marks and the syllable count. **Rimes** controls the **Rime**, **Disposition** and **Richesse** columns, together with the gold internal-rhyme marks.
@@ -48,7 +50,9 @@ Gold marks cover the letters associated with the common final phonemes, up to th
 
 Alliteration repeats consonant sounds and assonance repeats vowel sounds within a line. The chips give the sound and occurrence count. Hovering also shows the number of words involved.
 
-Select a chip to focus the sound. Select it again to hide its colour, then again to restore it. **×1** adds sounds occurring once in a subdued colour.
+The sound summary lists lines where an individual sound occurs at least four times. It shows qualifying alliterations and assonances together, with their counts, in the order of the text. Highlight filters apply to the displayed lines.
+
+Select several chips to focus their sounds together within a line. Select a chip again to hide its colour, then again to restore it. **×1** adds sounds occurring once in a subdued colour.
 
 Counts follow the proposed pronunciation. A realised liaison is counted once. A written group can represent several sounds. An occurrence can be counted while its uncertain letter alignment remains uncoloured.
 

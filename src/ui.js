@@ -3,6 +3,7 @@ const { initialize, transcribe }=__modules["engine.js"];
 const {analyzeSonorities,isAssonance}=__modules["sonorities.js"];
 const {applyPoeticReading}=__modules["poetry.js"];
 const {renderSonorityPanel,focusSonority}=__modules["sonorities-view.js"];
+const {applySonorityStyle}=__modules["sonority-colors.js"];
 
 const $ = id => document.getElementById(id);
 let currentResult = null;
@@ -19,6 +20,7 @@ const sonorityHiddenPhones = new Map();
 const sonorityCategories={alliterations:true,assonances:true};
 const sonorityVerseCategories=new Map();
 const sonorityCache = new WeakMap();
+const notableSoundMinimum = 4;
 
 
 
@@ -159,6 +161,67 @@ function getSonorities(result) {
   return sonorityCache.get(result);
 }
 
+function renderSonoritySummary(analysis) {
+  const summary = $('sonority-summary');
+  const list = $('sonority-summary-list');
+  summary.hidden = !analysis;
+  if (!analysis) {
+    list.replaceChildren();
+    return;
+  }
+
+  const items = document.createDocumentFragment();
+  let verseNumber = 0;
+  let hasNotableVerses = false;
+  for (const line of analysis.lines) {
+    if (!line.original.trim()) continue;
+    verseNumber++;
+    const groups = [
+      ['Allitérations', line.groups.alliterations.filter(sound => sound.count >= notableSoundMinimum)],
+      ['Assonances', line.groups.assonances.filter(sound => sound.count >= notableSoundMinimum)]
+    ];
+    if (groups.every(([, sounds]) => sounds.length === 0)) continue;
+
+    const item = document.createElement('li');
+    item.className = 'notable-verse';
+    const number = document.createElement('span');
+    number.className = 'notable-number';
+    number.textContent = 'Vers ' + verseNumber;
+    const content = document.createElement('div');
+    const text = document.createElement('p');
+    text.className = 'notable-text';
+    text.textContent = line.original;
+    content.append(text);
+
+    const details = document.createElement('div');
+    details.className = 'notable-details';
+    for (const [label, sounds] of groups) {
+      if (sounds.length === 0) continue;
+      const group = document.createElement('div');
+      group.className = 'notable-group';
+      const name = document.createElement('span');
+      name.className = 'notable-category';
+      name.textContent = label;
+      group.append(name);
+      for (const sound of sounds) {
+        const badge = document.createElement('span');
+        badge.className = 'notable-sound';
+        badge.textContent = '/' + sound.phone + '/ ×' + sound.count;
+        applySonorityStyle(badge, [sound.phone]);
+        group.append(badge);
+      }
+      details.append(group);
+    }
+    content.append(details);
+    item.append(number, content);
+    items.append(item);
+    hasNotableVerses = true;
+  }
+  list.replaceChildren(items);
+  list.hidden = !hasNotableVerses;
+  $('sonority-summary-empty').hidden = hasNotableVerses;
+}
+
 function render(result) {
   currentResult = result;
   const soundAnalysis = sonoritiesEnabled ? getSonorities(result) : null;
@@ -191,14 +254,16 @@ function render(result) {
     renderRhymeAnalysis(row, rhymes);
     if(soundAnalysis){
       const analysis=soundAnalysis.lines[lineIndex];
-      const selected=sonoritySelections.get(lineIndex);
+      const selected=sonoritySelections.get(lineIndex)||new Set();
       const hiddenPhones=sonorityHiddenPhones.get(lineIndex)||new Set();sonorityHiddenPhones.set(lineIndex,hiddenPhones);
       const categories=sonorityVerseCategories.get(lineIndex)||{...sonorityCategories};sonorityVerseCategories.set(lineIndex,categories);
       renderSonorityPanel(entry,analysis,{selected,hiddenPhones,categories,showSingletons,onToggleCategory:kind=>toggleSonorityCategory(kind,lineIndex),onSelect:phone=>{
-        if(hiddenPhones.has(phone)){hiddenPhones.delete(phone);sonoritySelections.delete(lineIndex);}
-        else if(sonoritySelections.get(lineIndex)===phone){hiddenPhones.add(phone);sonoritySelections.delete(lineIndex);}
-        else sonoritySelections.set(lineIndex,phone);
-        focusSonority(entry,analysis,sonoritySelections.get(lineIndex),{hiddenPhones,categories,showSingletons});
+        if (hiddenPhones.has(phone)) hiddenPhones.delete(phone);
+        else if (selected.delete(phone)) hiddenPhones.add(phone);
+        else selected.add(phone);
+        if (selected.size) sonoritySelections.set(lineIndex, selected);
+        else sonoritySelections.delete(lineIndex);
+        focusSonority(entry,analysis,selected,{hiddenPhones,categories,showSingletons});
       }});
     }
     if (line.classicalRegular !== null) {
@@ -214,6 +279,7 @@ function render(result) {
     fragment.append(row);
   }
   $('results').replaceChildren(fragment);
+  renderSonoritySummary(soundAnalysis);
   $('result-section').hidden = false;
 }
 
@@ -231,8 +297,13 @@ function toggleSonorityCategory(kind,lineIndex){
   for(const [i,line]of (currentResult?.lines||[]).entries()){
     if(!line.original?.trim()||!global&&i!==lineIndex)continue;
     const categories=sonorityVerseCategories.get(i)||{...sonorityCategories};categories[kind]=enabled;sonorityVerseCategories.set(i,categories);
-    const phone=sonoritySelections.get(i);
-    if(!enabled&&phone&&(isAssonance(phone)?'assonances':'alliterations')===kind)sonoritySelections.delete(i);
+    const selected = sonoritySelections.get(i);
+    if (!enabled && selected) {
+      for (const phone of selected) {
+        if ((isAssonance(phone) ? 'assonances' : 'alliterations') === kind) selected.delete(phone);
+      }
+      if (!selected.size) sonoritySelections.delete(i);
+    }
   }
   if(currentResult)render(currentResult);
   if(!global)document.querySelector('.line-result[data-line-index="'+lineIndex+'"] .sonority-category-toggle[data-category="'+kind+'"]')?.focus({preventScroll:true});
@@ -276,16 +347,58 @@ async function run(event) {
   } finally { button.disabled = false; button.textContent = 'Analyser'; }
 }
 
-$('input-text').addEventListener('input', () => {
+const inputText = $('input-text');
+const editButtons = ['clear-text', 'clear-line', 'clear-last-line'].map($);
+
+function syncEditButtons() {
+  for (const button of editButtons) button.disabled = inputText.value.length === 0;
+}
+
+function handleTextEdit() {
   inputRevision++;
   currentResult = null;
   verseDetails = [];
   $('results').replaceChildren();
+  renderSonoritySummary(null);
   $('result-section').hidden = true;
   $('status').classList.remove('error');
-  $('status').textContent = $('input-text').value.trim()
+  $('status').textContent = inputText.value.trim()
     ? 'Texte modifié. Cliquez sur Analyser.'
     : 'Prêt. Le texte reste sur cet appareil.';
+  syncEditButtons();
+}
+
+function clearTextRange(start, end) {
+  if (start !== end) {
+    inputText.setRangeText('', start, end, 'start');
+    handleTextEdit();
+  }
+  inputText.focus({preventScroll:true});
+}
+
+function clearLineAt(caret) {
+  const {value} = inputText;
+  let start = 0;
+  let previousBreak = 0;
+  for (const separator of value.matchAll(/\r\n|[\r\n\u2028\u2029]/gu)) {
+    const end = separator.index + separator[0].length;
+    if (end > caret) {
+      clearTextRange(start, end);
+      return;
+    }
+    start = end;
+    previousBreak = separator.index;
+  }
+  clearTextRange(previousBreak, value.length);
+}
+
+inputText.addEventListener('input', handleTextEdit);
+syncEditButtons();
+$('clear-text').addEventListener('click', () => clearTextRange(0, inputText.value.length));
+$('clear-line').addEventListener('click', () => clearLineAt(inputText.selectionStart));
+$('clear-last-line').addEventListener('click', () => {
+  const {value} = inputText;
+  clearLineAt(value.trimEnd().length || value.length);
 });
 $('transcription-form').addEventListener('submit', run);
 $('input-text').addEventListener('keydown', event => {
@@ -315,10 +428,13 @@ for(const kind of ['alliterations','assonances'])$('sonority-'+kind).addEventLis
 $('sonority-singletons').addEventListener('click',()=>{
   showSingletons=!showSingletons;
   if(!showSingletons&&currentResult){
-    const analysis=sonorityCache.get(currentResult)||analyzeSonorities(currentResult);
-    for(const [line,phone]of sonoritySelections){
-      const sounds=analysis.lines[line]?.soundGroups;
-      if(sounds&&[...sounds.alliterations,...sounds.assonances].some(g=>g.phone===phone&&g.count===1))sonoritySelections.delete(line);
+    const analysis = getSonorities(currentResult);
+    for (const [line, selected] of sonoritySelections) {
+      const {alliterations, assonances} = analysis.lines[line].soundGroups;
+      for (const sound of [...alliterations, ...assonances]) {
+        if (sound.count === 1) selected.delete(sound.phone);
+      }
+      if (!selected.size) sonoritySelections.delete(line);
     }
   }
   if(currentResult)render(currentResult);
