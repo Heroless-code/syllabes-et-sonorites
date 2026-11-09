@@ -186,6 +186,26 @@ assert.deepEqual(acrossStanzas.map(row => row.querySelector('.verse-richness').t
 const hiatusPairs = await analyze('Éblouies\ninouïes\n\nHaï\ntrahi\n\nOui\ninouï\n\nInouï\névanoui');
 assert.deepEqual(hiatusPairs.map(row => row.querySelector('.verse-richness').textContent),
   ['Suffisante', 'Suffisante', 'Suffisante', 'Suffisante', 'Pauvre', 'Pauvre', 'Riche', 'Riche']);
+const rhymeVariantCases = [
+  ['Zones', 'jaunes', 'Suffisante'], ['Anses', 'Hanses', 'Suffisante'],
+  ['Flache', 'lâche', 'Riche'], ['Embaumé', 'mai', 'Suffisante'],
+  ['Zones', 'personnes', 'Suffisante'], ['Flache', 'cache', 'Suffisante'],
+  ['Mai', 'mais', 'Suffisante'], ['Genoux', 'cheval', '—'],
+  ['Bonne', 'jaune', '—'], ['Patte', 'pâte', '—'], ['Pré', 'près', '—']
+];
+for (const [left, right, richness] of rhymeVariantCases) {
+  const rows = await analyze(left + '\n' + right);
+  assert.deepEqual(rows.map(row => row.querySelector('.verse-richness').textContent),
+    [richness, richness], left + ' / ' + right);
+  const letters = rows.map(row => row.querySelector('.verse-rhyme-letter').textContent);
+  assert.equal(letters[0] === letters[1], richness !== '—', left + ' / ' + right);
+}
+const separatedVariants = await analyze('Zones\r\n \r\njaunes');
+assert.deepEqual(separatedVariants.map(row => row.querySelector('.verse-richness').textContent), ['—', '—']);
+assert.ok(separatedVariants[1].classList.contains('stanza-start'));
+const competingVariants = await analyze('Flache\ncache\nlâche');
+assert.deepEqual(competingVariants.map(row => row.querySelector('.verse-richness').textContent),
+  ['Suffisante', 'Suffisante', '—']);
 const dispositionLabels = row => row.querySelector('.verse-scheme').querySelectorAll('.rhyme-annotation')
   .map(label => label.textContent);
 const stanza = await analyze('pont\nporte\nfond\njour\namour\nfront');
@@ -313,10 +333,27 @@ assert.equal(ids['result-section'].hidden, false);
 assert.deepEqual([8, 10, 93].map(index => exampleRows[index].querySelector('.verse-rhyme-letter').textContent),
   ['E', 'E', 'E']);
 assert.deepEqual([8, 9, 10, 11, 93].map(index => exampleRows[index].querySelector('.verse-richness').textContent),
-  ['Riche', 'Suffisante', 'Riche', 'Suffisante', 'Pauvre']);
+  ['Riche', 'Suffisante', 'Riche', 'Suffisante', 'Suffisante']);
 const hiatusLines = [exampleRows[36], exampleRows[38]];
 assert.deepEqual(hiatusLines.map(row => row.querySelector('.verse-count').textContent), ['12', '12']);
 assert.deepEqual(hiatusLines.map(row => row.querySelector('.verse-richness').textContent),
   ['Suffisante', 'Suffisante']);
+for (const [index, quality] of [[60, 'Suffisante'], [68, 'Suffisante'], [92, 'Riche'], [93, 'Suffisante']]) {
+  assert.deepEqual([index, index + 2].map(verse => exampleRows[verse].querySelector('.verse-richness').textContent),
+    [quality, quality], 'Vers ' + (index + 1) + ' et ' + (index + 3));
+}
+const exampleStanzas = example.split(/\r?\n[ \t]*\r?\n/u);
+assert.equal(exampleStanzas.length, 25);
+for (const [index, text] of exampleStanzas.entries()) {
+  const stanzaRows = exampleRows.slice(index * 4, index * 4 + 4);
+  assert.equal(text.split(/\r?\n/u).length, 4);
+  assert.equal(stanzaRows[0].classList.contains('stanza-start'), index !== 0);
+  const [a, b, c, d] = stanzaRows.map(row => row.querySelector('.verse-rhyme-letter').textContent);
+  assert.equal(a, c, 'Première rime du quatrain ' + (index + 1));
+  assert.equal(b, d, 'Deuxième rime du quatrain ' + (index + 1));
+  assert.notEqual(a, b, 'Familles distinctes dans le quatrain ' + (index + 1));
+  assert.ok(stanzaRows.every(row => row.querySelector('.richness-badge')), 'Richesse du quatrain ' + (index + 1));
+  assert.ok(dispositionLabels(stanzaRows[0]).includes('Croisées'), 'Disposition du quatrain ' + (index + 1));
+}
 console.log('Régressions et exemple complet du Bateau ivre vérifiés.');
 

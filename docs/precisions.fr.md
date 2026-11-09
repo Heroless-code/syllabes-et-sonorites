@@ -16,6 +16,8 @@ La colonne **Disposition** donne une lettre à chaque finale. La même dernière
 
 La comparaison des rimes ignore la durée des voyelles et réunit les deux prononciations traditionnelles de la famille « âme / flamme / dame / femme ». Les sonorités utilisent les phonèmes de la lecture poétique, avant ces ajustements de rime.
 
+Pour certaines finales, le moteur peut retenir une variante documentée quand elle rapproche deux vers de la même strophe qui restent sans partenaire et que le rapprochement est unique. Il conserve les paires que la prononciation principale suffit à former. Dans *Le Bateau ivre*, cette règle permet notamment « zones / jaunes », « anses / Hanses », « flache / lâche » et « embaumé / mai ». [TLFi, « zone »](https://www.cnrtl.fr/lexicographie/zone) · [Usito, « mai »](https://usito.usherbrooke.ca/articles/m%C3%A9tadonn%C3%A9es/phonetiquePrincipes)
+
 Le nom d’un motif apparaît au début du bloc où il est reconnu. Les rimes **plates** se suivent par paires (`A A B B`), les **croisées** alternent (`A B A B`), et les **embrassées** encadrent une paire (`A B B A`). La mention **Redoublées** figure au début d’une strophe dès qu’une même rime apparaît au moins trois fois dans cette strophe, y compris dans des blocs différents. Les lettres restent lisibles dans les passages où aucun de ces motifs ne se dégage.
 
 La colonne **Richesse** compare la suite finale de sons commune aux vers de même lettre dans la strophe. Si un vers est seul à porter sa lettre dans la strophe, le calcul utilise la famille dans l’ensemble du poème. La suite commune peut s’étendre sur plusieurs mots, comme dans « des marées / démarrées ».

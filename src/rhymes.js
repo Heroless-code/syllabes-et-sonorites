@@ -1,7 +1,14 @@
+// Documented variants for verse endings. Zone uses the TLFi's closed vowel.
+// The other alternatives are already present in the bundled phonetic lexicon.
+const rhymeVariants = new Map([
+  ['zone', 'zon'], ['zones', 'zon'], ['hanses', 'ɑ̃s'],
+  ['flache', 'flɑʃ'], ['flaches', 'flɑʃ'], ['mai', 'me']
+]);
+
 function analyzeRhymes(lines, caesuras) {
   const { phones, isVowel } = __modules["phonology.js"];
   const poemGroups = new Map();
-  const stanzaGroups = new Map();
+  const stanzaEndings = [];
   const verses = lines.map(() => ({
     letter:'—', richness:'—', disposition:'', redoubled:false, internal:false, internalSpans:[]
   }));
@@ -47,7 +54,7 @@ function analyzeRhymes(lines, caesuras) {
     return phoneIndex === expected.length ? spans : [];
   }
 
-  function ending(tokens, first, limit, offsets) {
+  function ending(tokens, first, limit, offsets, finalIpa) {
     let last = limit - 1;
     while (last >= first && tokens[last].type !== 'word') last--;
     if (last < first) return null;
@@ -56,7 +63,8 @@ function analyzeRhymes(lines, caesuras) {
     for (let index = first; index <= last; index++) {
       const word = tokens[index];
       if (word.type !== 'word') continue;
-      const phonemes = pronouncedPhones(word.ipa || '');
+      const ipa = index === last && finalIpa ? finalIpa : word.ipa;
+      const phonemes = pronouncedPhones(ipa || '');
       const spans = offsets ? alignedSpans(word, offsets[index], phonemes) : [];
       if (index === last) {
         // A liaison into the next segment is external to the ending.
@@ -106,6 +114,29 @@ function analyzeRhymes(lines, caesuras) {
       for (const index of members) {
         if (verses[index].richness === '—') verses[index].richness = richness;
       }
+    }
+  }
+
+  function selectStanzaVariants() {
+    const singletons = new Map();
+    for (const entry of stanzaEndings) {
+      const {key} = entry.final;
+      singletons.set(key, singletons.has(key) ? null : entry);
+    }
+
+    const proposals = [];
+    const candidateCounts = new Map();
+    for (const entry of stanzaEndings) {
+      if (!entry.variant || singletons.get(entry.final.key) !== entry) continue;
+      const partner = singletons.get(entry.variant.key);
+      if (!partner || partner === entry) continue;
+      proposals.push({entry, partner});
+      candidateCounts.set(entry, (candidateCounts.get(entry) || 0) + 1);
+      candidateCounts.set(partner, (candidateCounts.get(partner) || 0) + 1);
+    }
+    // A variant may link two otherwise isolated endings if the match is unique.
+    for (const {entry, partner} of proposals) {
+      if (candidateCounts.get(entry) === 1 && candidateCounts.get(partner) === 1) entry.final = entry.variant;
     }
   }
 
@@ -178,9 +209,17 @@ function analyzeRhymes(lines, caesuras) {
   }
 
   function finishStanza(end) {
+    selectStanzaVariants();
+    const stanzaGroups = new Map();
+    for (const {index, final} of stanzaEndings) {
+      const group = addEnding(poemGroups, final.key, final.sounds, index);
+      group.label ??= labelFor(poemGroups.size - 1);
+      verses[index].letter = group.label;
+      addEnding(stanzaGroups, final.key, final.sounds, index);
+    }
+    stanzaEndings.length = 0;
     setDispositions(stanzaStart, end);
     setRichness(stanzaGroups);
-    stanzaGroups.clear();
     for (const cut of stanzaCaesuras) {
       if (!cut.size) continue;
       const verse = verses[cut.index];
@@ -217,10 +256,10 @@ function analyzeRhymes(lines, caesuras) {
 
     const final = ending(line.tokens, 0, line.tokens.length);
     if (!final) continue;
-    const group = addEnding(poemGroups, final.key, final.sounds, index);
-    group.label ??= labelFor(poemGroups.size - 1);
-    verses[index].letter = group.label;
-    addEnding(stanzaGroups, final.key, final.sounds, index);
+    const word = line.tokens.findLast(token => token.type === 'word');
+    const variantIpa = rhymeVariants.get(word.lower);
+    const variant = variantIpa ? ending(line.tokens, 0, line.tokens.length, undefined, variantIpa) : null;
+    stanzaEndings.push({index, final, variant});
   }
   finishStanza(lines.length);
   for (const verse of verses) verse.internalSpans = mergeSpans(verse.internalSpans);
