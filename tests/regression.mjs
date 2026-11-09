@@ -170,14 +170,19 @@ assert.deepEqual(poem.map(row => row.querySelector('.verse-rhyme-letter').textCo
 assert.deepEqual(poem.flatMap(row => row.querySelectorAll('.rhyme-annotation').map(label => label.textContent)),
   ['Plates', 'Croisées', 'Embrassées', 'Redoublées']);
 assert.deepEqual(poem.slice(0, 4).map(row => row.querySelector('.verse-richness').textContent),
-  ['Suffisante', 'Suffisante', 'Riche', 'Riche']);
+  ['Riche', 'Riche', 'Riche', 'Riche']);
+assert.deepEqual([4, 6, 12, 13, 14].map(index => poem[index].querySelector('.verse-richness').textContent),
+  Array(5).fill('Suffisante'));
 assert.equal(poem[8].querySelector('.verse-richness').textContent, 'Pauvre');
-for (const [index, quality] of [[0, 'suffisante'], [2, 'riche'], [8, 'pauvre']]) {
+for (const [index, quality] of [[0, 'riche'], [4, 'suffisante'], [8, 'pauvre']]) {
   assert.equal(poem[index].querySelector('.richness-badge').dataset.quality, quality);
 }
 const pair = await analyze('Cheval\nRival\nCœur');
 assert.deepEqual(pair.map(row => row.querySelector('.verse-richness').textContent), ['Riche', 'Riche', '—']);
 assert.equal(pair[2].querySelector('.richness-badge'), undefined);
+const acrossStanzas = await analyze('Final\n\nBancale\n\nCœur');
+assert.deepEqual(acrossStanzas.map(row => row.querySelector('.verse-rhyme-letter').textContent), ['A', 'A', 'B']);
+assert.deepEqual(acrossStanzas.map(row => row.querySelector('.verse-richness').textContent), ['Suffisante', 'Suffisante', '—']);
 const dispositionLabels = row => row.querySelector('.verse-scheme').querySelectorAll('.rhyme-annotation')
   .map(label => label.textContent);
 const stanza = await analyze('pont\nporte\nfond\njour\namour\nfront');
@@ -302,5 +307,9 @@ const exampleRows = await analyze(example);
 assert.equal(exampleRows.length, 100);
 assert.equal(ids.status.textContent, '100 vers analysés.');
 assert.equal(ids['result-section'].hidden, false);
+assert.deepEqual([8, 10, 93].map(index => exampleRows[index].querySelector('.verse-rhyme-letter').textContent),
+  ['E', 'E', 'E']);
+assert.deepEqual([8, 9, 10, 11, 93].map(index => exampleRows[index].querySelector('.verse-richness').textContent),
+  ['Riche', 'Suffisante', 'Riche', 'Suffisante', 'Pauvre']);
 console.log('Régressions et exemple complet du Bateau ivre vérifiés.');
 

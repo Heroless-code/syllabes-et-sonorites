@@ -2865,7 +2865,8 @@ function findCaesuras(line, meter) {
 
 function analyzeRhymes(lines, caesuras) {
   const { phones, isVowel } = __modules["phonology.js"];
-  const groups = new Map();
+  const poemGroups = new Map();
+  const stanzaGroups = new Map();
   const verses = lines.map(() => ({
     letter:'—', richness:'—', disposition:'', redoubled:false, internal:false, internalSpans:[]
   }));
@@ -2953,6 +2954,28 @@ function analyzeRhymes(lines, caesuras) {
     return 1;
   }
 
+  function addEnding(groups, key, sounds, index) {
+    const group = groups.get(key);
+    if (group) {
+      group.common = commonEnding(group.common, sounds);
+      group.members.push(index);
+      return group;
+    }
+    const first = {common:sounds, members:[index]};
+    groups.set(key, first);
+    return first;
+  }
+
+  function setRichness(groups) {
+    for (const {common, members} of groups.values()) {
+      if (members.length < 2) continue;
+      const richness = ['Pauvre', 'Suffisante', 'Riche'][richnessSize(common) - 1];
+      for (const index of members) {
+        if (verses[index].richness === '—') verses[index].richness = richness;
+      }
+    }
+  }
+
   function namedBlock(start, end) {
     const [a, b, c, d] = verses.slice(start, Math.min(end, start + 4)).map(verse => verse.letter);
     if (a === '—') return null;
@@ -3023,6 +3046,8 @@ function analyzeRhymes(lines, caesuras) {
 
   function finishStanza(end) {
     setDispositions(stanzaStart, end);
+    setRichness(stanzaGroups);
+    stanzaGroups.clear();
     for (const cut of stanzaCaesuras) {
       if (!cut.size) continue;
       const verse = verses[cut.index];
@@ -3059,23 +3084,16 @@ function analyzeRhymes(lines, caesuras) {
 
     const final = ending(line.tokens, 0, line.tokens.length);
     if (!final) continue;
-    if (!groups.has(final.key)) {
-      groups.set(final.key, {label:labelFor(groups.size), common:final.sounds, lines:[index]});
-    } else {
-      const group = groups.get(final.key);
-      group.common = commonEnding(group.common, final.sounds);
-      group.lines.push(index);
-    }
-    verses[index].letter = groups.get(final.key).label;
+    const group = addEnding(poemGroups, final.key, final.sounds, index);
+    group.label ??= labelFor(poemGroups.size - 1);
+    verses[index].letter = group.label;
+    addEnding(stanzaGroups, final.key, final.sounds, index);
   }
   finishStanza(lines.length);
   for (const verse of verses) verse.internalSpans = mergeSpans(verse.internalSpans);
 
-  for (const {common, lines: members} of groups.values()) {
-    if (members.length < 2) continue;
-    const richness = ['Pauvre', 'Suffisante', 'Riche'][richnessSize(common) - 1];
-    for (const index of members) verses[index].richness = richness;
-  }
+  // Only lines without a partner in their stanza use the whole-poem family.
+  setRichness(poemGroups);
   return verses;
 }
 

@@ -18,7 +18,9 @@ La comparaison des rimes ignore la durée des voyelles et réunit les deux prono
 
 Le nom d’un motif apparaît au début du bloc où il est reconnu. Les rimes **plates** se suivent par paires (`A A B B`), les **croisées** alternent (`A B A B`), et les **embrassées** encadrent une paire (`A B B A`). La mention **Redoublées** figure au début d’une strophe dès qu’une même rime apparaît au moins trois fois dans cette strophe, y compris dans des blocs différents. Les lettres restent lisibles dans les passages où aucun de ces motifs ne se dégage.
 
-La colonne **Richesse** compare la suite de sons commune à tous les vers de même lettre. Une rime **pauvre**, en mauve, partage la voyelle finale. Une rime **suffisante**, en bleu, partage une voyelle et une consonne, comme « final / bancale ». Une rime **riche**, en vert, partage au moins trois phonèmes, comme « porte / morte ». Un tiret indique une rime sans partenaire ou une finale que le moteur ne peut pas identifier.
+La colonne **Richesse** compare la suite finale de sons commune aux vers de même lettre dans la strophe. Si un vers est seul à porter sa lettre dans la strophe, le calcul utilise la famille dans l’ensemble du poème. La suite commune peut s’étendre sur plusieurs mots, comme dans « des marées / démarrées ».
+
+Une rime **pauvre**, en mauve, partage la voyelle finale. Une rime **suffisante**, en bleu, partage une voyelle et une consonne, comme « final / bancale ». Une rime **riche**, en vert, partage au moins trois phonèmes, comme « porte / morte ». Un tiret indique une rime sans partenaire ou une finale que le moteur ne peut pas identifier.
 
 ## Césure
 

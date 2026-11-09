@@ -18,7 +18,7 @@ Rhyme comparison ignores vowel duration and brings together the traditional vari
 
 Scheme names appear at the beginning of a recognised block. Paired rhymes follow **A A B B**, alternating rhymes **A B A B**, and enclosed rhymes **A B B A**. **Redoublées** is shown at the beginning of a stanza when one rhyme occurs at least three times anywhere in that stanza.
 
-**Richesse** compares the final sound sequence shared by all lines of the same letter.
+**Richesse** compares the final sound sequence shared by lines of the same letter within the stanza. When a line is the only one with its letter in the stanza, the comparison uses the family across the whole poem. The shared sequence can span multiple words, as in *des marées / démarrées*.
 
 - **Pauvre**, in purple, shares the final vowel.
 - **Suffisante**, in blue, shares a vowel and a consonant, as in *final / bancale*.
