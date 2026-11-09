@@ -2445,13 +2445,13 @@ function renderSonorityPanel(row,analysis,{selected,onSelect,categories={alliter
   row.append(panel);focusSonority(row,analysis,selected,{hiddenPhones,categories,showSingletons});
 }
 
-return {focusSonority,renderSonorityPanel};
+return {focusSonority,markSounds,renderSonorityPanel};
 })();
 __modules["ui.js"]=(()=>{
 const { initialize, transcribe }=__modules["engine.js"];
 const {analyzeSonorities,isAssonance}=__modules["sonorities.js"];
 const {applyPoeticReading}=__modules["poetry.js"];
-const {renderSonorityPanel,focusSonority}=__modules["sonorities-view.js"];
+const {renderSonorityPanel,focusSonority,markSounds}=__modules["sonorities-view.js"];
 const {applySonorityStyle}=__modules["sonority-colors.js"];
 
 const $ = id => document.getElementById(id);
@@ -2465,6 +2465,7 @@ let caesurasEnabled = false;
 let showSingletons = false;
 
 const sonoritySelections = new Map();
+const notableSonoritySelections = new Map();
 const sonorityHiddenPhones = new Map();
 const sonorityCategories={alliterations:true,assonances:true};
 const sonorityVerseCategories=new Map();
@@ -2857,7 +2858,9 @@ function analyzeRhymes(lines, caesuras) {
   return verses;
 }
 
-function renderOriginal(container, tokens, original, meter, caesuras, internalSpans) {
+function renderOriginal(container, {tokens, original}, {
+  meter, caesuras = [], internalSpans = [], showUncertainty = true
+} = {}) {
   const boundaries = meter ? meter.boundaries.map(at => at - meter.start) : [];
   const caesuraOffsets = new Set(caesurasEnabled ? caesuras.map(cut => cut.offset) : []);
   const segmentEnds = [0, ...caesuras.map(cut => boundaries.indexOf(cut.offset) + 1)];
@@ -2922,7 +2925,7 @@ function renderOriginal(container, tokens, original, meter, caesuras, internalSp
     if (token.type !== 'word') { appendText(container, token.text); continue; }
     const word = document.createElement('span');
     const uncertain = token.confidence === 'hypothesis' || token.confidence === 'ambiguous' || token.confidence === 'fallback';
-    if (sonoritiesEnabled && uncertain) word.className = 'word-uncertain';
+    if (sonoritiesEnabled && showUncertainty && uncertain) word.className = 'word-uncertain';
     const segments = token.segments || [];
     if (sonoritiesEnabled && segments.length && segments.map(s => s.text).join('') === token.text) {
       for (const [segmentIndex,segment] of segments.entries()) {
@@ -3008,7 +3011,8 @@ function renderSonoritySummary(analysis) {
       ['Allitérations', line.groups.alliterations.filter(sound => sound.count >= notableSoundMinimum)],
       ['Assonances', line.groups.assonances.filter(sound => sound.count >= notableSoundMinimum)]
     ];
-    if (groups.every(([, sounds]) => sounds.length === 0)) continue;
+    const notableSounds = groups.flatMap(([, sounds]) => sounds);
+    if (!notableSounds.length) continue;
 
     const item = document.createElement('li');
     item.className = 'notable-verse';
@@ -3018,8 +3022,12 @@ function renderSonoritySummary(analysis) {
     const content = document.createElement('div');
     const text = document.createElement('p');
     text.className = 'notable-text';
-    text.textContent = line.original;
+    renderOriginal(text, currentResult.lines[line.lineIndex], {showUncertainty:false});
     content.append(text);
+
+    const selected = notableSonoritySelections.get(line.lineIndex) || new Set();
+    const updateHighlights = () => markSounds(text, selected.size ? notableSounds : [], selected);
+    if (selected.size) updateHighlights();
 
     const details = document.createElement('div');
     details.className = 'notable-details';
@@ -3032,10 +3040,19 @@ function renderSonoritySummary(analysis) {
       name.textContent = label;
       group.append(name);
       for (const sound of sounds) {
-        const badge = document.createElement('span');
+        const badge = document.createElement('button');
+        badge.type = 'button';
         badge.className = 'notable-sound';
         badge.textContent = '/' + sound.phone + '/ ×' + sound.count;
+        badge.setAttribute('aria-pressed', String(selected.has(sound.phone)));
         applySonorityStyle(badge, [sound.phone]);
+        badge.addEventListener('click', () => {
+          if (!selected.delete(sound.phone)) selected.add(sound.phone);
+          if (selected.size) notableSonoritySelections.set(line.lineIndex, selected);
+          else notableSonoritySelections.delete(line.lineIndex);
+          badge.setAttribute('aria-pressed', String(selected.has(sound.phone)));
+          updateHighlights();
+        });
         group.append(badge);
       }
       details.append(group);
@@ -3071,7 +3088,7 @@ function render(result) {
     original.className = 'line-original';
     const {meter, caesuras, rhymes} = verseDetails[lineIndex];
     if (caesurasEnabled && caesuras.length) row.classList.add('has-caesuras');
-    renderOriginal(original, line.tokens, line.original, meter, caesuras, showRhymes ? rhymes.internalSpans : []);
+    renderOriginal(original, line, {meter, caesuras, internalSpans:showRhymes ? rhymes.internalSpans : []});
     const entry = document.createElement('div');
     entry.className = 'verse-entry';
     row.append(entry);
@@ -3163,6 +3180,7 @@ async function run(event) {
     const rhymes = analyzeRhymes(result.lines, caesuras);
     verseDetails = meters.map((meter, index) => ({meter, caesuras:caesuras[index], rhymes:rhymes[index]}));
     sonoritySelections.clear();
+    notableSonoritySelections.clear();
     sonorityHiddenPhones.clear();
     sonorityVerseCategories.clear();
     render(result);

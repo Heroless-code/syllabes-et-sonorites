@@ -2091,5 +2091,5 @@ function renderSonorityPanel(row,analysis,{selected,onSelect,categories={alliter
   row.append(panel);focusSonority(row,analysis,selected,{hiddenPhones,categories,showSingletons});
 }
 
-return {focusSonority,renderSonorityPanel};
+return {focusSonority,markSounds,renderSonorityPanel};
 })();
