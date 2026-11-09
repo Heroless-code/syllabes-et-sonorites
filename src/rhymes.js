@@ -84,9 +84,7 @@ function analyzeRhymes(lines, caesuras) {
   }
 
   function richnessSize(common) {
-    if (common.length >= 3) return 3;
-    if (common.length === 2 && isVowel(common[0]) !== isVowel(common[1])) return 2;
-    return 1;
+    return Math.min(3, common.length);
   }
 
   function addEnding(groups, key, sounds, index) {

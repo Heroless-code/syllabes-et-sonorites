@@ -14,14 +14,14 @@ A range such as **4 à 6** indicates alternative counts. Homographs, synaeresis 
 
 The **Disposition** column assigns a letter to each final rhyme family. The same last pronounced vowel, followed by the same consonants, receives the same letter throughout the poem. A final caduc e is excluded. Letters continue with **AA**, **AB**, and so on after **Z**.
 
-Rhyme comparison ignores vowel duration and brings together the traditional variants in the **âme / flamme / dame / femme** final family. Sound-pattern analysis continues to use the lexicon's pronunciations.
+Rhyme comparison ignores vowel duration and brings together the traditional variants in the **âme / flamme / dame / femme** final family. Sound-pattern analysis uses the poetic reading before these rhyme adjustments.
 
 Scheme names appear at the beginning of a recognised block. Paired rhymes follow **A A B B**, alternating rhymes **A B A B**, and enclosed rhymes **A B B A**. **Redoublées** is shown at the beginning of a stanza when one rhyme occurs at least three times anywhere in that stanza.
 
 **Richesse** compares the final sound sequence shared by lines of the same letter within the stanza. When a line is the only one with its letter in the stanza, the comparison uses the family across the whole poem. The shared sequence can span multiple words, as in *des marées / démarrées*.
 
-- **Pauvre**, in purple, shares the final vowel.
-- **Suffisante**, in blue, shares a vowel and a consonant, as in *final / bancale*.
+- **Pauvre**, in purple, shares one phoneme.
+- **Suffisante**, in blue, shares two phonemes. They can be two consecutive vowels, as in the poetic reading of *éblouies / inouïes*, which shares /u.i/.
 - **Riche**, in green, shares at least three phonemes, as in *porte / morte*.
 
 A dash identifies a family with no partner or an ending the engine cannot identify.

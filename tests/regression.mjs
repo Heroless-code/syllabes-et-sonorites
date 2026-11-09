@@ -183,6 +183,9 @@ assert.equal(pair[2].querySelector('.richness-badge'), undefined);
 const acrossStanzas = await analyze('Final\n\nBancale\n\nCœur');
 assert.deepEqual(acrossStanzas.map(row => row.querySelector('.verse-rhyme-letter').textContent), ['A', 'A', 'B']);
 assert.deepEqual(acrossStanzas.map(row => row.querySelector('.verse-richness').textContent), ['Suffisante', 'Suffisante', '—']);
+const hiatusPairs = await analyze('Éblouies\ninouïes\n\nHaï\ntrahi\n\nOui\ninouï\n\nInouï\névanoui');
+assert.deepEqual(hiatusPairs.map(row => row.querySelector('.verse-richness').textContent),
+  ['Suffisante', 'Suffisante', 'Suffisante', 'Suffisante', 'Pauvre', 'Pauvre', 'Riche', 'Riche']);
 const dispositionLabels = row => row.querySelector('.verse-scheme').querySelectorAll('.rhyme-annotation')
   .map(label => label.textContent);
 const stanza = await analyze('pont\nporte\nfond\njour\namour\nfront');
@@ -311,5 +314,9 @@ assert.deepEqual([8, 10, 93].map(index => exampleRows[index].querySelector('.ver
   ['E', 'E', 'E']);
 assert.deepEqual([8, 9, 10, 11, 93].map(index => exampleRows[index].querySelector('.verse-richness').textContent),
   ['Riche', 'Suffisante', 'Riche', 'Suffisante', 'Pauvre']);
+const hiatusLines = [exampleRows[36], exampleRows[38]];
+assert.deepEqual(hiatusLines.map(row => row.querySelector('.verse-count').textContent), ['12', '12']);
+assert.deepEqual(hiatusLines.map(row => row.querySelector('.verse-richness').textContent),
+  ['Suffisante', 'Suffisante']);
 console.log('Régressions et exemple complet du Bateau ivre vérifiés.');
 

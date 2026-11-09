@@ -2353,10 +2353,14 @@ const SOURCES=[
   {title:'Laurent Jenny, Versification, I.2.2 (Université de Genève)',url:'https://www.unige.ch/lettres/framo/enseignements/methodes/versification/vrintegr.html'},
   {title:'Larousse, diérèse',url:'https://www.larousse.fr/dictionnaires/francais/di%C3%A9r%C3%A8se/25391'}
 ];
+// Preserve the literary ou-i reading of these forms, including rhyming
+// partners such as inouï and évanoui (Quicherat, syllable counts for oui).
+const OUI_DIAERESIS=/^(?:inouï|évanoui|épanoui|ébloui|enfoui|réjoui|joui)e?s?$/u;
 const HIATUS=[
   [/^lions?$/u,'j'],[/^liens?$/u,'j'],[/^dictions?$/u,'j'],[/^miasmes?$/u,'j'],
   [/^supérieure?s?$/u,'j'],[/^purifier$/u,'j'],[/^hiers?$/u,'j'],
-  [/^nuages?$/u,'ɥ'],[/^nuées?$/u,'ɥ'],[/^ruelles?$/u,'ɥ'],[/^duel(?:s|le|les)?$/u,'ɥ']
+  [/^nuages?$/u,'ɥ'],[/^nuées?$/u,'ɥ'],[/^ruelles?$/u,'ɥ'],[/^duel(?:s|le|les)?$/u,'ɥ'],
+  [OUI_DIAERESIS,'w']
 ];
 const VOWEL_GLIDE={j:'i','ɥ':'y',w:'u'};
 const GRAMMATICAL_SCHWA=new Set(['le','de','ce','que','ne','me','te','se','je']);
@@ -2428,6 +2432,9 @@ function hiatusVariants(token,ps){
     if(dia[found-1]===vowel)dia.splice(found,1);else dia.splice(found,1,vowel);
     out.push({ps:dia,label:'Diérèse',reason:'Lecture en deux noyaux vocaliques documentée pour cette famille.'});
   }
+  // Keep a contracted reading when supplied by the lexicon. Do not generate
+  // one from an already distinct pair of vowels, as in éblouies /e.blu.i/.
+  if(match[0]===OUI_DIAERESIS)return out;
   for(let i=0;i<ps.length-1;i++)if(ps[i]===vowel&&isVowel(ps[i+1])){
     const syn=[...ps];syn.splice(i,1,glide);
     out.push({ps:syn,label:'Synérèse',reason:'Lecture contractée de la séquence vocalique, proposée explicitement.'});break;
@@ -2485,11 +2492,15 @@ function applyPoeticReading(baseResult,{choices={}}={}){
       }else if(liaison)token.liaison=liaison;
       const candidates=[{ps:reading.ps,label:'Lecture proposée',reason:reading.rule||'Prononciation de base conservée.'},...hiatusVariants(token,citation.ps).map(v=>({...v,ps:caducReading(v.ps,ending(token,v.ps,posttonicJe),edge,right).ps}))];
       const unique=new Map();for(const candidate of candidates){const ipa=finish(candidate.ps.join(''),token.liaison);if(!unique.has(key(ipa)))unique.set(key(ipa),{ipa,label:candidate.label,reason:candidate.reason});}
-      const options=[...unique.values()];let selected=options[0];
+      const options=[...unique.values()];
+      const literaryDefault=OUI_DIAERESIS.test(lower(token.lower||token.text))
+        ? options.find(option=>option.label==='Diérèse')
+        : null;
+      let selected=literaryDefault||options[0];
       const choice=choices?.[li]?.[ti];
       if(choice!==undefined){selected=options.find(o=>key(o.ipa)===key(choice));if(!selected)throw new RangeError('Variante poétique non proposée pour « '+token.text+' ».');}
       token.ipa=selected.ipa;token.displayPhonetic=token.ipa;
-      const reasons=[citation.reason,reading.rule,reading.warning,options.length>1?'Diérèse/synérèse à choisir selon l’œuvre, l’époque et la lecture.':null].filter(Boolean);
+      const reasons=[citation.reason,reading.rule,reading.warning,selected===literaryDefault?selected.reason:null,options.length>1?'Diérèse/synérèse à choisir selon l’œuvre, l’époque et la lecture.':null].filter(Boolean);
       token.poetryReason=reasons.join(' ');
       token.poetryChanged=key(original)!==key(token.ipa);
       token.poetryHypothesis=Boolean(reading.warning||options.length>1||citation.reason);
@@ -2949,9 +2960,7 @@ function analyzeRhymes(lines, caesuras) {
   }
 
   function richnessSize(common) {
-    if (common.length >= 3) return 3;
-    if (common.length === 2 && isVowel(common[0]) !== isVowel(common[1])) return 2;
-    return 1;
+    return Math.min(3, common.length);
   }
 
   function addEnding(groups, key, sounds, index) {

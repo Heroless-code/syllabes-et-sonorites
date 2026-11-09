@@ -14,13 +14,15 @@ Après modification du texte, cliquez de nouveau sur **Analyser** pour obtenir l
 
 La colonne **Disposition** donne une lettre à chaque finale. La même dernière voyelle prononcée, suivie des mêmes consonnes éventuelles, reçoit la même lettre dans tout le poème. Le calcul écarte le *e* caduc final. Après `Z`, les lettres continuent avec `AA`, `AB`, etc.
 
-La comparaison des rimes ignore la durée des voyelles et réunit les deux prononciations traditionnelles de la famille « âme / flamme / dame / femme ». Les sonorités restent calculées à partir des prononciations fournies par le lexique.
+La comparaison des rimes ignore la durée des voyelles et réunit les deux prononciations traditionnelles de la famille « âme / flamme / dame / femme ». Les sonorités utilisent les phonèmes de la lecture poétique, avant ces ajustements de rime.
 
 Le nom d’un motif apparaît au début du bloc où il est reconnu. Les rimes **plates** se suivent par paires (`A A B B`), les **croisées** alternent (`A B A B`), et les **embrassées** encadrent une paire (`A B B A`). La mention **Redoublées** figure au début d’une strophe dès qu’une même rime apparaît au moins trois fois dans cette strophe, y compris dans des blocs différents. Les lettres restent lisibles dans les passages où aucun de ces motifs ne se dégage.
 
 La colonne **Richesse** compare la suite finale de sons commune aux vers de même lettre dans la strophe. Si un vers est seul à porter sa lettre dans la strophe, le calcul utilise la famille dans l’ensemble du poème. La suite commune peut s’étendre sur plusieurs mots, comme dans « des marées / démarrées ».
 
-Une rime **pauvre**, en mauve, partage la voyelle finale. Une rime **suffisante**, en bleu, partage une voyelle et une consonne, comme « final / bancale ». Une rime **riche**, en vert, partage au moins trois phonèmes, comme « porte / morte ». Un tiret indique une rime sans partenaire ou une finale que le moteur ne peut pas identifier.
+Une rime **pauvre**, en mauve, partage un phonème. Une rime **suffisante**, en bleu, en partage deux, y compris deux voyelles successives comme /u.i/ dans « éblouies / inouïes ». Une rime **riche**, en vert, partage au moins trois phonèmes, comme « porte / morte ». Un tiret indique une rime sans partenaire ou une finale que le moteur ne peut pas identifier. [Laurent Jenny, *Versification*, Université de Genève](https://www.unige.ch/lettres/framo/enseignements/methodes/versification/vrintegr.html)
+
+La lecture poétique privilégie la diérèse /u.i/ dans « inouï » et dans les formes comparables prises en charge, comme « évanoui » et « réjoui ». [Quicherat, *Petit Traité de versification française*](https://fr.wikisource.org/wiki/Petit_Trait%C3%A9_de_versification_fran%C3%A7aise_(Quicherat))
 
 ## Césure
 
