@@ -178,7 +178,7 @@ function analyzeRhymes(lines, caesuras) {
     return a === b ? ['Plates', 2] : null;
   }
 
-  function setDispositions(start, end) {
+  function applyStanzaPatterns(start, end, endings) {
     const frequencies = new Map();
     for (let index = start; index < end; index++) {
       const {letter} = verses[index];
@@ -192,6 +192,15 @@ function analyzeRhymes(lines, caesuras) {
       if (block) {
         const [name, length] = block;
         if (previous !== name) verses[index].disposition = name;
+        if (name) {
+          // A recognized pattern pairs each letter locally. Unnamed runs keep
+          // the stanza-wide comparison, since they do not identify distinct pairs.
+          const pairs = new Map();
+          for (let member = index; member < index + length; member++) {
+            addEnding(pairs, endings.get(member), member);
+          }
+          setRichness(pairs);
+        }
         previous = name;
         index += length;
         continue;
@@ -235,14 +244,16 @@ function analyzeRhymes(lines, caesuras) {
   function finishStanza(end) {
     selectStanzaVariants();
     const stanzaGroups = new Map();
+    const endings = new Map();
     for (const {index, final} of stanzaEndings) {
       const group = addEnding(poemGroups, final, index);
       group.label ??= labelFor(poemGroups.size - 1);
       verses[index].letter = group.label;
       addEnding(stanzaGroups, final, index);
+      endings.set(index, final);
     }
     stanzaEndings.length = 0;
-    setDispositions(stanzaStart, end);
+    applyStanzaPatterns(stanzaStart, end, endings);
     setRichness(stanzaGroups);
     for (const cut of stanzaCaesuras) {
       if (!cut.size) continue;

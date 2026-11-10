@@ -12,6 +12,8 @@ A range such as **4 à 6** indicates alternative counts. Homographs, synaeresis 
 
 **Fem.** and **Masc.** refer to feminine and masculine verse endings. **F / M** indicates an ambiguous ending.
 
+The counter uses attested verb forms from the bundled dictionary to recognize a single-syllable ending in forms such as *pre/nions* and *chan/gions*. Diaeresis applies after certain consonant clusters, as in *en/tri/ons*, and to verbs ending in *-ier*, as in *pri/ions*. [Quicherat, *Petit Traité de versification française*](https://fr.wikisource.org/wiki/Petit_Trait%C3%A9_de_versification_fran%C3%A7aise_(Quicherat))
+
 ## Rhyme schemes and richness
 
 The **Disposition** column assigns a letter to each final rhyme family. The same last pronounced vowel, followed by the same consonants, receives the same letter throughout the poem. A final caduc e is excluded. Letters continue with **AA**, **AB**, and so on after **Z**.
@@ -22,7 +24,7 @@ For a few endings, the engine uses a documented pronunciation variant when it un
 
 Scheme names appear at the beginning of a recognised block. Paired rhymes follow **A A B B**, alternating rhymes **A B A B**, and enclosed rhymes **A B B A**. **Redoublées** is shown at the beginning of a stanza when one rhyme occurs at least three times anywhere in that stanza.
 
-For each line, **Richesse** uses the longest final sound sequence it shares with another line of the same letter in its stanza. If no other line in the stanza has that letter, the engine looks for a partner across the poem. A single letter can therefore cover two rich pairs in the same stanza, such as *charnier / prisonnier* and *étaler / avaler*. The shared sequence can span multiple words, as in *des marées / démarrées*.
+**Richesse** gives priority to the two lines paired by a recognized paired, alternating or enclosed rhyme scheme, even without blank lines between blocks. A single letter can therefore cover pairs of different richness. For lines outside a recognized pair, the engine uses the longest final sound sequence shared with a line of the same letter in its stanza, or across the poem if the line is alone with that letter in its stanza. The shared sequence can span multiple words, as in *des marées / démarrées*.
 
 - **Pauvre**, in purple, shares one sound unit.
 - **Suffisante**, in blue, shares two units. They can be two consecutive vowels, as in the poetic reading of *éblouies / inouïes*, which shares /u.i/.

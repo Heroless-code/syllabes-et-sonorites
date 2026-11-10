@@ -208,6 +208,19 @@ assert.deepEqual(mixedAcrossStanzas.map(row => row.querySelector('.verse-richnes
 const stanzaPriority = await analyze('Étaler\nParler\n\nAvaler');
 assert.deepEqual(stanzaPriority.map(row => row.querySelector('.verse-richness').textContent),
   ['Suffisante', 'Suffisante', 'Riche']);
+const patternPairs = [
+  ['Embrassées', ['Clarté', 'Gazon', 'Raison', 'Bonté', 'Silence', 'Pognon', 'Horizon', 'Présence']],
+  ['Croisées', ['Clarté', 'Gazon', 'Bonté', 'Raison', 'Silence', 'Pognon', 'Présence', 'Horizon']],
+  ['Plates', ['Gazon', 'Raison', 'Silence', 'Présence', 'Pognon', 'Horizon']]
+];
+for (const [pattern, words] of patternPairs) {
+  const rows = await analyze(words.join('\n'));
+  const paired = ['Gazon', 'Raison', 'Pognon', 'Horizon'].map(word => rows[words.indexOf(word)]);
+  assert.ok(rows[0].querySelectorAll('.rhyme-annotation').some(label => label.textContent === pattern));
+  assert.equal(new Set(paired.map(row => row.querySelector('.verse-rhyme-letter').textContent)).size, 1);
+  assert.deepEqual(paired.map(row => row.querySelector('.verse-richness').textContent),
+    ['Suffisante', 'Suffisante', 'Pauvre', 'Pauvre'], pattern);
+}
 const hiatusPairs = await analyze('Éblouies\ninouïes\n\nHaï\ntrahi\n\nOui\ninouï\n\nInouï\névanoui');
 assert.deepEqual(hiatusPairs.map(row => row.querySelector('.verse-richness').textContent),
   ['Suffisante', 'Suffisante', 'Suffisante', 'Suffisante', 'Pauvre', 'Pauvre', 'Riche', 'Riche']);
@@ -335,6 +348,24 @@ const shortCases = [
 const shortVerses = await analyze(shortCases.map(([text]) => text).join('\n\n'));
 assert.deepEqual(shortVerses.map(row => row.querySelector('.caesura-divider')?.dataset.pattern || ''),
   shortCases.map(([,pattern]) => pattern));
+const conjugations = [
+  ['Prenions', 'Pre/nions', 2], ['Surprenions', 'Sur/pre/nions', 3],
+  ['Buvions', 'Bu/vions', 2], ['Voulions', 'Vou/lions', 2],
+  ['Concevions', 'Con/ce/vions', 3], ['Boirions', 'Boi/rions', 2],
+  ['Avancions', 'A/van/cions', 3], ['Changions', 'Chan/gions', 2],
+  ['Entrions', 'En/tri/ons', 3], ['Célébrions', 'Cé/lé/bri/ons', 4],
+  ['Voudrions', 'Vou/dri/ons', 3], ['Priions', 'Pri/ions', 2], ['Estonifions', 'Es/to/ni/fi/ons', 5],
+  ['Nations', 'Na/ti/ons', 3], ['Aviez', 'A/viez', 2],
+  ['Preniez', 'Pre/niez', 2], ['Ouvriez', 'Ou/vri/ez', 3]
+];
+const conjugatedRows = await analyze(conjugations.map(([word]) => word).join('\n'));
+for (const [index, [word, segmented, count]] of conjugations.entries()) {
+  assert.equal(conjugatedRows[index].querySelector('.line-original').textContent, segmented, word);
+  assert.equal(conjugatedRows[index].querySelector('.verse-count').textContent, String(count), word);
+}
+const [takingCoats] = await analyze('Quand le vent se leva, nous prenions notre veste !');
+assert.equal(takingCoats.querySelector('.verse-count').textContent, '12');
+assert.equal(takingCoats.querySelector('.caesura-divider').dataset.pattern, '6/6');
 const flameVerses = await analyze('Viens voir le songeur qui s’enflamme\nEt, de jour en jour, dans son âme');
 assert.deepEqual(flameVerses.map(row => row.querySelector('.verse-rhyme-letter').textContent), ['A', 'A']);
 assert.deepEqual(flameVerses.map(row => row.querySelector('.verse-richness').textContent), ['Suffisante', 'Suffisante']);

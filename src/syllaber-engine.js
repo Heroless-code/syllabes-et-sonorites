@@ -1,8 +1,8 @@
 
 /* Moteur autonome. Les indices publics sont ceux de la chaîne originale (UTF-16).
  * Aucun accès DOM, réseau, horloge ou stockage. La factory peut être sérialisée
- * dans un Worker ; toutes ses dépendances sont dans le paramètre lexical. */
-function createSyllaber(lexicon) {
+ * dans un Worker ; ses données et la recherche lexicale sont fournies par l’appelant. */
+function createSyllaber(lexicon, lookupPronunciation) {
   'use strict';
   lexicon = lexicon || {};
   const vowels = new Set(Array.from('aàâäæeéèêëiîïoôöœuùûüyÿ'));
@@ -31,6 +31,18 @@ function createSyllaber(lexicon) {
   const canonical = s => s.normalize('NFC').toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
   const normalize = s => s.normalize('NFC').toLowerCase();
   const spellingKey = s => s.toLowerCase().replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}\p{M}]+$/gu,'').replace(/’/gu,"'");
+
+  function attestedVerbIon(word, stem) {
+    const entry = lookupPronunciation?.(word);
+    if (!entry || ![entry.ipa, ...(entry.alternatives || [])].every(ipa => /jɔ̃ː?$/u.test(ipa))) return false;
+    if (entry.pos?.length) {
+      return entry.pos.every(pos => pos === 'VER' || pos === 'AUX')
+        && !lookupPronunciation(stem + 'ier')?.pos?.includes('VER');
+    }
+    // Some attested inflections lack grammatical tags. A known infinitive
+    // with this stem supplies the missing evidence, as in surprenions.
+    return lookupPronunciation(stem + 'dre')?.pos?.includes('VER') === true;
+  }
 
   function letters(raw) {
     const out = [];
@@ -72,10 +84,11 @@ function createSyllaber(lexicon) {
     const before = chars.slice(Math.max(0,index-2),index).map(c => base(c.key)).join('');
     const remaining=chars.length-index-1;
     const after = chars.slice(index+1,index+11).map(c => c.key).join('')+(remaining>10?'#':'');
+    const liquidCluster=/[^aeiouy][lr]$/u.test(before) && before[0]!==before[1];
     if (y === 'a') return /^(?:diable|diacre|fiacre|giaour|viande|diantre|biais)/u.test(word) || features.illiard;
     if (y === 'o') {
       if (/^(?:fiole|kiosque|mioche|pioche)/u.test(word)) return true;
-      return /(?:[yi]|rl)$/u.test(before) || features.verbIon;
+      return /(?:[yi]|rl)$/u.test(before) || (features.verbIon && !liquidCluster);
     }
     if (y === 'u') return false;
     if (y !== 'e') return false;
@@ -92,7 +105,6 @@ function createSyllaber(lexicon) {
     if (/^ennes?$/u.test(after)) return /^(?:mienne|sienne|tienne|chienne|chrétienne|gardienne|paroissienne|païenne|ancienne|vaurienne)/u.test(word) || /(?:tienne|vienne)/u.test(word);
     if (/^ents?$/u.test(after) || /^ences?$/u.test(after)) return /^(?:vient|tient|souvient|revient|devient)/u.test(word);
     if (/^ens?$/u.test(after)) return /^(?:bien|combien|rien|chien|mien|sien|tien|chrétien|gardien|paroissien|païen|vaurien|sébastien|amiens|ancien)s?$/u.test(word);
-    const liquidCluster=/[^aeiouy][lr]$/u.test(before) && before[0]!==before[1];
     if (/^èmes?$/u.test(after)) return !liquidCluster;
     if (/^è/u.test(after)) return !liquidCluster;
     if (/^er/u.test(after)) return !liquidCluster && !/^(?:allier|colorier|initier|lier|nier|confier)$/u.test(word);
@@ -109,7 +121,13 @@ function createSyllaber(lexicon) {
     const prefixLength=word.length-lexicalWord.length;
     const ionStem=lexicalWord.endsWith('ions')?lexicalWord.slice(0,-4):'';
     const pastASubjunctive=lexicalWord.endsWith('assions') && presentStems.has(lexicalWord.slice(0,-7));
-    const features={uiHiatus:/(druide|fluide|bruine|bruire|ruine|suicid)/u.test(word),illiard:/illiards?$/u.test(word),verbIon:!ionNouns.has(lexicalWord) && (pastASubjunctive||presentStems.has(ionStem)||presentStems.has(ionStem+'e')||(ionStem.endsWith('er')&&presentStems.has(ionStem.slice(0,-2)))||/^(?:pouv|dev|ét|ir|dir|fer|ver|sent|cour|ven|reven|fais|dis|puiss|fuss|a[uy])ions$/u.test(lexicalWord)),aieu:word.includes('aïeu'),cueil:word.includes('cueil'),ierAt:-1};
+    const verbIon=Boolean(ionStem) && !ionNouns.has(lexicalWord) && (
+      pastASubjunctive || presentStems.has(ionStem) || presentStems.has(ionStem+'e') ||
+      (ionStem.endsWith('er') && presentStems.has(ionStem.slice(0,-2))) ||
+      /^(?:pouv|dev|ét|ir|dir|fer|ver|sent|cour|ven|reven|fais|dis|puiss|fuss|a[uy])$/u.test(ionStem) ||
+      attestedVerbIon(lexicalWord, ionStem)
+    );
+    const features={uiHiatus:/(druide|fluide|bruine|bruire|ruine|suicid)/u.test(word),illiard:/illiards?$/u.test(word),verbIon,aieu:word.includes('aïeu'),cueil:word.includes('cueil'),ierAt:-1};
     const family=countVariants.families?.find(f=>word.startsWith(f.prefix));
     features.familyJoinAt=family?.joinAt??-1;
     features.familyJoinPair=family?.pair||'';
@@ -319,5 +337,3 @@ function createSyllaber(lexicon) {
 }
 globalThis.createSyllaber = createSyllaber;
 if (typeof module !== 'undefined' && module.exports) module.exports = {createSyllaber};
-
-  

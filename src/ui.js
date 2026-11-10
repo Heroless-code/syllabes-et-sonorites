@@ -1,5 +1,6 @@
 __modules["ui.js"]=(()=>{
 const { initialize, transcribe }=__modules["engine.js"];
+const {lookup}=__modules["lexicon.js"];
 const {analyzeSonorities,isAssonance}=__modules["sonorities.js"];
 const {applyPoeticReading}=__modules["poetry.js"];
 const {renderSonorityPanel,focusSonority,markSounds}=__modules["sonorities-view.js"];
@@ -9,7 +10,7 @@ const $ = id => document.getElementById(id);
 let currentResult = null;
 let inputRevision = 0;
 
-const syllabifyVerses = globalThis.createSyllaber(globalThis.SYLLABER_LEXICON);
+const syllabifyVerses = globalThis.createSyllaber(globalThis.SYLLABER_LEXICON, lookup);
 let verseDetails = [];
 let sonoritiesEnabled = true;
 let caesurasEnabled = false;

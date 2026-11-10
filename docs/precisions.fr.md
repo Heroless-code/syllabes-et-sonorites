@@ -12,6 +12,8 @@ Sous **Analyser**, **Tout effacer** vide la zone de saisie. **Effacer la ligne**
 - Une fourchette comme **4 à 6** indique plusieurs comptes possibles. Deux lectures d’un homographe ou une alternance entre **synérèse** (un seul noyau vocalique) et **diérèse** (deux noyaux) peuvent faire varier le compte. La segmentation affichée représente une seule lecture.
 - **Fem.** et **Masc.** désignent le genre de la finale en versification. **F / M** indique une finale qui peut être féminine ou masculine selon la lecture. Par exemple, Syllaber laisse ouverte la lecture de la finale de « couvent ». La colonne indique le genre de la rime.
 
+Le compteur utilise aussi les formes verbales attestées dans le lexique local pour reconnaître la synérèse de la désinence « -ions », par exemple dans « pre/nions » et « chan/gions ». La diérèse s’applique après certains groupes de consonnes, comme dans « en/tri/ons », et pour des verbes en « -ier », comme dans « pri/ions ». [Quicherat, *Petit Traité de versification française*](https://fr.wikisource.org/wiki/Petit_Trait%C3%A9_de_versification_fran%C3%A7aise_(Quicherat))
+
 ## Disposition et richesse des rimes
 
 La colonne **Disposition** donne une lettre à chaque finale. La même dernière voyelle prononcée, suivie des mêmes consonnes éventuelles, reçoit la même lettre dans tout le poème. Le calcul écarte le *e* caduc final. Après `Z`, les lettres continuent avec `AA`, `AB`, etc.
@@ -22,7 +24,7 @@ Pour certaines finales, le moteur peut retenir une variante documentée quand el
 
 Le nom d’un motif apparaît au début du bloc où il est reconnu. Les rimes **plates** se suivent par paires (`A A B B`), les **croisées** alternent (`A B A B`), et les **embrassées** encadrent une paire (`A B B A`). La mention **Redoublées** figure au début d’une strophe dès qu’une même rime apparaît au moins trois fois dans cette strophe, y compris dans des blocs différents. Les lettres restent lisibles dans les passages où aucun de ces motifs ne se dégage.
 
-Pour chaque vers, la colonne **Richesse** retient la plus longue suite finale de sons partagée avec un autre vers de même lettre dans la strophe. Si le vers est seul à porter sa lettre dans la strophe, le moteur cherche ce partenaire dans l’ensemble du poème. Ainsi, dans une même strophe, « charnier / prisonnier » et « étaler / avaler » peuvent former deux paires riches sous la même lettre. La suite commune peut s’étendre sur plusieurs mots, comme dans « des marées / démarrées ».
+La colonne **Richesse** compare en priorité les deux vers que le schéma de rimes plates, croisées ou embrassées associe, même si aucune ligne vide ne sépare les blocs. Une même lettre peut donc désigner plusieurs paires de richesse différente. Pour les vers sans paire reconnue, le moteur retient la plus longue suite finale de sons partagée avec un vers de même lettre dans la strophe, ou dans le poème si le vers est seul à porter sa lettre dans la strophe. La suite commune peut s’étendre sur plusieurs mots, comme dans « des marées / démarrées ».
 
 Une rime **pauvre**, en mauve, partage une unité sonore. Une rime **suffisante**, en bleu, en partage deux, y compris deux voyelles successives comme /u.i/ dans « éblouies / inouïes ». Une rime **riche**, en vert, en partage au moins trois, comme « porte / morte ». Un tiret indique une rime sans partenaire ou une finale que le moteur ne peut pas identifier. [Laurent Jenny, *Versification*, Université de Genève](https://www.unige.ch/lettres/framo/enseignements/methodes/versification/vrintegr.html)
 
