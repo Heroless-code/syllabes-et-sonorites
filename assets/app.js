@@ -2685,23 +2685,32 @@ function analyzeRhymes(lines, caesuras) {
   }
 
   function addEnding(groups, key, sounds, index) {
-    const group = groups.get(key);
-    if (group) {
-      group.common = commonEnding(group.common, sounds);
-      group.members.push(index);
-      return group;
+    let group = groups.get(key);
+    if (!group) {
+      group = {members:[]};
+      groups.set(key, group);
     }
-    const first = {common:sounds, members:[index]};
-    groups.set(key, first);
-    return first;
+    group.members.push({index, sounds});
+    return group;
   }
 
   function setRichness(groups) {
-    for (const {common, members} of groups.values()) {
+    const labels = ['Pauvre', 'Suffisante', 'Riche'];
+    for (const {members} of groups.values()) {
       if (members.length < 2) continue;
-      const richness = ['Pauvre', 'Suffisante', 'Riche'][richnessSize(common) - 1];
-      for (const index of members) {
-        if (verses[index].richness === '—') verses[index].richness = richness;
+      const suffixCounts = new Map();
+      for (const {sounds} of members) {
+        for (let size = 2; size <= richnessSize(sounds); size++) {
+          const suffix = sounds.slice(-size).join('|');
+          suffixCounts.set(suffix, (suffixCounts.get(suffix) || 0) + 1);
+        }
+      }
+      for (const {index, sounds} of members) {
+        if (verses[index].richness !== '—') continue;
+        // The family guarantees one shared sound. Longer suffixes need an actual partner.
+        let size = richnessSize(sounds);
+        while (size > 1 && (suffixCounts.get(sounds.slice(-size).join('|')) || 0) < 2) size--;
+        verses[index].richness = labels[size - 1];
       }
     }
   }

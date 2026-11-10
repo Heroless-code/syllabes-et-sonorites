@@ -44,7 +44,7 @@ Les césures, les prononciations et certains comptes sont des propositions de le
 | --- | --- |
 | <img src="docs/screenshots/mobile-input.jpg" width="275" alt="Saisie du texte sur mobile"> | <img src="docs/screenshots/mobile-results.jpg" width="275" alt="Résultats de l’analyse sur mobile"> |
 
-[Lire les précisions en français](docs/precisions.fr.md)
+[Lire les précisions en français](docs/precisions.fr.md) · [Consulter l’audit des *Contemplations*](docs/audit-contemplations.fr.md)
 
 <a id="english"></a>
 ## <img src="docs/assets/gb.svg" width="24" alt="United Kingdom"> English
@@ -106,7 +106,7 @@ Google décide de l’indexation et du classement. Aucun rang ni délai n’est 
 
 The site uses **Syllaber** consistently in its title, visible content and metadata. Its owner can verify the URL-prefix property in Google Search Console, submit the sitemap and request indexing. Search inclusion and ranking remain Google's decision; no first-place guarantee is made.
 
-The regression suite covers source-text preservation, independent controls, rhyme schemes, richness, internal-rhyme alignment, short and odd-length lines, caesura divisions, and changed-input handling. Earlier development checks also exercised 158 poetic pages and the preface of Victor Hugo’s *Les Contemplations* on Wikisource.
+The regression suite covers source-text preservation, independent controls, rhyme schemes, richness, internal-rhyme alignment, short and odd-length lines, caesura divisions, and changed-input handling. Both distributions were also tested on 11,216 lines from 158 poetic texts in Victor Hugo’s *Les Contemplations*. [Read the audit in French](docs/audit-contemplations.fr.md).
 
 ## Sources
 

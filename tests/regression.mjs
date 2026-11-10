@@ -195,6 +195,19 @@ assert.equal(pair[2].querySelector('.richness-badge'), undefined);
 const acrossStanzas = await analyze('Final\n\nBancale\n\nCœur');
 assert.deepEqual(acrossStanzas.map(row => row.querySelector('.verse-rhyme-letter').textContent), ['A', 'A', 'B']);
 assert.deepEqual(acrossStanzas.map(row => row.querySelector('.verse-richness').textContent), ['Suffisante', 'Suffisante', '—']);
+const mixedRichness = await analyze([
+  'Au bord du charnier,', 'On vient tout étaler ;', 'Il resta prisonnier !',
+  'Il voulait tout avaler.', 'Tu dois parler.', 'Il va manger.'
+].join('\n'));
+assert.deepEqual(mixedRichness.map(row => row.querySelector('.verse-rhyme-letter').textContent), Array(6).fill('A'));
+assert.deepEqual(mixedRichness.map(row => row.querySelector('.verse-richness').textContent),
+  ['Riche', 'Riche', 'Riche', 'Riche', 'Suffisante', 'Pauvre']);
+const mixedAcrossStanzas = await analyze('Charnier\n\nÉtaler\n\nPrisonnier\n\nAvaler\n\nParler\n\nManger');
+assert.deepEqual(mixedAcrossStanzas.map(row => row.querySelector('.verse-richness').textContent),
+  ['Riche', 'Riche', 'Riche', 'Riche', 'Suffisante', 'Pauvre']);
+const stanzaPriority = await analyze('Étaler\nParler\n\nAvaler');
+assert.deepEqual(stanzaPriority.map(row => row.querySelector('.verse-richness').textContent),
+  ['Suffisante', 'Suffisante', 'Riche']);
 const hiatusPairs = await analyze('Éblouies\ninouïes\n\nHaï\ntrahi\n\nOui\ninouï\n\nInouï\névanoui');
 assert.deepEqual(hiatusPairs.map(row => row.querySelector('.verse-richness').textContent),
   ['Suffisante', 'Suffisante', 'Suffisante', 'Suffisante', 'Pauvre', 'Pauvre', 'Riche', 'Riche']);

@@ -22,7 +22,7 @@ For a few endings, the engine uses a documented pronunciation variant when it un
 
 Scheme names appear at the beginning of a recognised block. Paired rhymes follow **A A B B**, alternating rhymes **A B A B**, and enclosed rhymes **A B B A**. **Redoublées** is shown at the beginning of a stanza when one rhyme occurs at least three times anywhere in that stanza.
 
-**Richesse** compares the final sound sequence shared by lines of the same letter within the stanza. When a line is the only one with its letter in the stanza, the comparison uses the family across the whole poem. The shared sequence can span multiple words, as in *des marées / démarrées*.
+For each line, **Richesse** uses the longest final sound sequence it shares with another line of the same letter in its stanza. If no other line in the stanza has that letter, the engine looks for a partner across the poem. A single letter can therefore cover two rich pairs in the same stanza, such as *charnier / prisonnier* and *étaler / avaler*. The shared sequence can span multiple words, as in *des marées / démarrées*.
 
 - **Pauvre**, in purple, shares one phoneme.
 - **Suffisante**, in blue, shares two phonemes. They can be two consecutive vowels, as in the poetic reading of *éblouies / inouïes*, which shares /u.i/.
