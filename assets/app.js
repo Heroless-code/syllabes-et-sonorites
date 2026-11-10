@@ -2596,6 +2596,7 @@ const rhymeVariants = new Map([
 
 function analyzeRhymes(lines, caesuras) {
   const { phones, isVowel } = __modules["phonology.js"];
+  const { ASSONANCE_SEQUENCES } = __modules["sonorities.js"];
   const poemGroups = new Map();
   const stanzaEndings = [];
   const verses = lines.map(() => ({
@@ -2610,9 +2611,7 @@ function analyzeRhymes(lines, caesuras) {
     return label;
   }
 
-  function pronouncedPhones(ipa) {
-    return phones(ipa).filter(phone => phone !== '.' && phone !== '‿');
-  }
+  const isPronounced = phone => phone !== '.' && phone !== '‿';
 
   function rhymePhones(sounds) {
     // Vowel duration does not add a phoneme to the rhyme comparison.
@@ -2634,7 +2633,7 @@ function analyzeRhymes(lines, caesuras) {
     for (const segment of segments) {
       const end = offset + segment.text.length;
       const span = !segment.silent && !segment.uncertain && end > offset ? {start:offset, end} : null;
-      for (const phone of pronouncedPhones((segment.phones || []).join(''))) {
+      for (const phone of phones((segment.phones || []).join('')).filter(isPronounced)) {
         if (phone !== expected[phoneIndex++]) return [];
         spans.push(span);
       }
@@ -2649,11 +2648,13 @@ function analyzeRhymes(lines, caesuras) {
     if (last < first) return null;
     const sounds = [];
     const anchors = [];
+    const joinedVowels = new Set();
     for (let index = first; index <= last; index++) {
       const word = tokens[index];
       if (word.type !== 'word') continue;
       const ipa = index === last && finalIpa ? finalIpa : word.ipa;
-      const phonemes = pronouncedPhones(ipa || '');
+      const pronunciation = phones(ipa || '');
+      const phonemes = pronunciation.filter(isPronounced);
       const spans = offsets ? alignedSpans(word, offsets[index], phonemes) : [];
       if (index === last) {
         // A liaison into the next segment is external to the ending.
@@ -2661,15 +2662,29 @@ function analyzeRhymes(lines, caesuras) {
         if (phonemes.at(-1) === 'ə' && phonemes.slice(0, -1).some(isVowel)) phonemes.pop();
       }
       const excludedSpan = spans[phonemes.length];
-      for (const [phoneIndex, phone] of phonemes.entries()) {
+      let phoneIndex = 0;
+      for (const [position, phone] of pronunciation.entries()) {
+        if (phoneIndex === phonemes.length) break;
+        if (!isPronounced(phone)) continue;
+        if (ASSONANCE_SEQUENCES.includes((pronunciation[position - 1] || '') + phone)) {
+          joinedVowels.add(sounds.length);
+        }
         sounds.push(phone);
         if (offsets) anchors.push(spans[phoneIndex] !== excludedSpan ? spans[phoneIndex] || null : null);
+        phoneIndex++;
       }
     }
 
     const compared = rhymePhones(sounds);
     const vowel = compared.findLastIndex(isVowel);
-    return vowel < 0 ? null : {key:compared.slice(vowel).join('|'), sounds:compared, anchors};
+    if (vowel < 0) return null;
+    // Group « oi » and « ui » for richness only. Keep phonemes for internal-rhyme marks.
+    const units = [];
+    for (const [index, phone] of compared.entries()) {
+      if (joinedVowels.has(index)) units[units.length - 1] += phone;
+      else units.push(phone);
+    }
+    return {key:compared.slice(vowel).join('|'), sounds:compared, anchors, units};
   }
 
   function commonEnding(a, b) {
@@ -2684,13 +2699,13 @@ function analyzeRhymes(lines, caesuras) {
     return Math.min(3, common.length);
   }
 
-  function addEnding(groups, key, sounds, index) {
+  function addEnding(groups, {key, units}, index) {
     let group = groups.get(key);
     if (!group) {
       group = {members:[]};
       groups.set(key, group);
     }
-    group.members.push({index, sounds});
+    group.members.push({index, units});
     return group;
   }
 
@@ -2699,17 +2714,17 @@ function analyzeRhymes(lines, caesuras) {
     for (const {members} of groups.values()) {
       if (members.length < 2) continue;
       const suffixCounts = new Map();
-      for (const {sounds} of members) {
-        for (let size = 2; size <= richnessSize(sounds); size++) {
-          const suffix = sounds.slice(-size).join('|');
+      for (const {units} of members) {
+        for (let size = 2; size <= richnessSize(units); size++) {
+          const suffix = units.slice(-size).join('|');
           suffixCounts.set(suffix, (suffixCounts.get(suffix) || 0) + 1);
         }
       }
-      for (const {index, sounds} of members) {
+      for (const {index, units} of members) {
         if (verses[index].richness !== '—') continue;
         // The family guarantees one shared sound. Longer suffixes need an actual partner.
-        let size = richnessSize(sounds);
-        while (size > 1 && (suffixCounts.get(sounds.slice(-size).join('|')) || 0) < 2) size--;
+        let size = richnessSize(units);
+        while (size > 1 && (suffixCounts.get(units.slice(-size).join('|')) || 0) < 2) size--;
         verses[index].richness = labels[size - 1];
       }
     }
@@ -2810,10 +2825,10 @@ function analyzeRhymes(lines, caesuras) {
     selectStanzaVariants();
     const stanzaGroups = new Map();
     for (const {index, final} of stanzaEndings) {
-      const group = addEnding(poemGroups, final.key, final.sounds, index);
+      const group = addEnding(poemGroups, final, index);
       group.label ??= labelFor(poemGroups.size - 1);
       verses[index].letter = group.label;
-      addEnding(stanzaGroups, final.key, final.sounds, index);
+      addEnding(stanzaGroups, final, index);
     }
     stanzaEndings.length = 0;
     setDispositions(stanzaStart, end);

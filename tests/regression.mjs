@@ -211,14 +211,18 @@ assert.deepEqual(stanzaPriority.map(row => row.querySelector('.verse-richness').
 const hiatusPairs = await analyze('Éblouies\ninouïes\n\nHaï\ntrahi\n\nOui\ninouï\n\nInouï\névanoui');
 assert.deepEqual(hiatusPairs.map(row => row.querySelector('.verse-richness').textContent),
   ['Suffisante', 'Suffisante', 'Suffisante', 'Suffisante', 'Pauvre', 'Pauvre', 'Riche', 'Riche']);
-const rhymeVariantCases = [
+const rhymeCases = [
   ['Zones', 'jaunes', 'Suffisante'], ['Anses', 'Hanses', 'Suffisante'],
   ['Flache', 'lâche', 'Riche'], ['Embaumé', 'mai', 'Suffisante'],
   ['Zones', 'personnes', 'Suffisante'], ['Flache', 'cache', 'Suffisante'],
   ['Mai', 'mais', 'Suffisante'], ['Genoux', 'cheval', '—'],
-  ['Bonne', 'jaune', '—'], ['Patte', 'pâte', '—'], ['Pré', 'près', '—']
+  ['Bonne', 'jaune', '—'], ['Patte', 'pâte', '—'], ['Pré', 'près', '—'],
+  ['Parfois', 'toi', 'Pauvre'], ['Nuit', 'bruit', 'Pauvre'],
+  ['Moi', 'émoi', 'Suffisante'], ['Suite', 'fuite', 'Suffisante'],
+  ['Poil', 'voile', 'Suffisante'], ['Boite', 'déboite', 'Riche'],
+  ['Coins', 'soins', 'Suffisante'], ['Toi', 'trois', '—']
 ];
-for (const [left, right, richness] of rhymeVariantCases) {
+for (const [left, right, richness] of rhymeCases) {
   const rows = await analyze(left + '\n' + right);
   assert.deepEqual(rows.map(row => row.querySelector('.verse-richness').textContent),
     [richness, richness], left + ' / ' + right);

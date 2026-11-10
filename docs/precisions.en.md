@@ -24,9 +24,11 @@ Scheme names appear at the beginning of a recognised block. Paired rhymes follow
 
 For each line, **Richesse** uses the longest final sound sequence it shares with another line of the same letter in its stanza. If no other line in the stanza has that letter, the engine looks for a partner across the poem. A single letter can therefore cover two rich pairs in the same stanza, such as *charnier / prisonnier* and *étaler / avaler*. The shared sequence can span multiple words, as in *des marées / démarrées*.
 
-- **Pauvre**, in purple, shares one phoneme.
-- **Suffisante**, in blue, shares two phonemes. They can be two consecutive vowels, as in the poetic reading of *éblouies / inouïes*, which shares /u.i/.
-- **Riche**, in green, shares at least three phonemes, as in *porte / morte*.
+- **Pauvre**, in purple, shares one sound unit.
+- **Suffisante**, in blue, shares two units. They can be two consecutive vowels, as in the poetic reading of *éblouies / inouïes*, which shares /u.i/.
+- **Riche**, in green, shares at least three units, as in *porte / morte*.
+
+Syllaber counts phonemes and treats each single-syllable sequence /wa/, /wɑ/ or /ɥi/ as one unit. *Parfois / toi* and *nuit / bruit* are therefore poor rhymes. *Moi / émoi* is sufficient because it also shares /m/.
 
 A dash identifies a family with no partner or an ending the engine cannot identify.
 
